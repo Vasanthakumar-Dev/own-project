@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="icon" type="image/x-icon" href="img/icon_img.png">
+    <link rel="stylesheet" href="style.css">
+    <title>Zehnder</title>
+</head>
+
+<body class="login-page">
+    <div class="language-selection">
+        <div class="drop-down language" onclick="openMenu('language_menu')" id="language_menu"
+        style="margin-right: 30px">
+            <div style="display: flex;align-items:center">
+                <img src="img/globe.png" width="15" alt="Language">
+                <select id="language" onchange="getLanguage(this.value)">
+                    <option value="i18n/en.json">English</option>
+                    <option value="i18n/ge.json">German</option>
+                    <option value="i18n/de.json">Dutch</option>
+                    <option value="i18n/fr.json">French</option>
+                </select>
+                <span class="chevron top"></span>
+            </div>
+
+        </div>
+    </div>
+    <div class="card">
+        <div class="logo large-logo slide-left" style="flex: 0 0 45%">
+            <img src="img/logo.png" alt="Logo" style="margin-top: 35%;width: 60%;">
+        </div>
+        <div class="form slide-right" style="flex: 0 0 55%;">
+            <div class="small-logo">
+                <img src="img/logo_img.png" width="100" alt="Logo">
+            </div>
+            <form id="login-form" name="login" method="post">
+                <div class="form-group form-row select" style="margin-bottom: 60px">
+                    <select name="type" id="type" class="form-control" required onchange="loginType(this.value)">
+                        <option value="" disabled selected data-translate="select_type">Select the type</option>
+                        <option value="0" data-translate="service">Service/Installer</option>
+                        <option value="1" data-translate="zehnder">Zehnder Service</option>
+                        <option value="2" data-translate="enduser">End User</option>
+                    </select>
+                    <div class="arrow"></div>
+                </div>
+
+                <div class="form-group form-row">
+                    <input type="text" class="form-control" data-translate="user_name" placeholder="User name" name="username" maxlength="20" id="username" onkeypress="allowAlphaNumericSpace(event)" required>
+                    <!-- <span>User name <em style="color:red;">*</em></span> -->
+                </div>
+                <div class="form-group form-row">
+                    <input type="password" class="form-control" data-translate="password" placeholder="Password" name="password" maxlength="20" id="password" onkeypress="allowAlphaNumericSpace(event)" required>
+                    <!-- <span>Password <em style="color:red;">*</em></span> -->
+                </div>
+
+                <div class="form-group form-row" style="margin-bottom: 0;color: #fff;">
+                    <button class="btn" value="" data-translate="login" onclick="return submitData()">Login</button>
+                </div>
+                <!-- <div style="text-align:center"><small>Version - V1.2</small></div> -->
+                <div>
+                    <br>
+                    <small data-translate="reminder_text">
+                        Before starting the commissioning, first check the most recent firmware at <i>www.zehnder.nl</i> or <i>www.zehnder.be</i> website.
+                    </small>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="alert success" id="alert_success">
+        <span class="closebtn" onclick="this.parentElement.classList.remove('show');">&times;</span>  
+        <strong>Success!</strong> <span id="success_msg"></span>
+    </div>
+    <div class="alert warning" id="alert_error">
+        <span class="closebtn" onclick="this.parentElement.classList.remove('show')">&times;</span>  
+        <strong>Oops!</strong> <span id="error_msg"></span>
+    </div>
+</body>
+
+<script>
+   
+  /*Get SSID*/
+ 
+    function getSSID() {
+        // gatewayResponse = {"opmode":1,"fixedspeedmax":100,"fixedspeedmin":0,"pfactor":0,"ifactor":1,"cfunc":1,"mtr_stop_en":0,"range":{"rng_min_setpoint_pres":0,"rng_max_setpoint_pres":500,"rng_fixedspeedmax":100,"rng_fixedspeedmin":0,"rng_min_pfactor":0,"rng_max_pfactor":100,"rng_min_ifactor":1,"rng_max_ifactor":10,"rng_min_sensor_adj":-100,"rng_max_sensor_adj":100},"sensoradj":{"preSensorAdj":0},"fans":{"fan1_addr":1,"fan1_sl":"00000","fan2_addr":0,"fan2_sl":"00000","fan3_addr":0,"fan3_sl":"00000","fan4_addr":0,"fan4_sl":"00000","fan5_addr":0,"fan5_sl":"00000","fan6_addr":0,"fan6_sl":"00000","fan7_addr":0,"fan7_sl":"00000","fan8_addr":0,"fan8_sl":"00000","fan9_addr":0,"fan9_sl":"00000","fan10_addr":0,"fan10_sl":"00000","fan11_addr":0,"fan11_sl":"00000","fan12_addr":0,"fan12_sl":"00000","fan13_addr":0,"fan13_sl":"00000","fan14_addr":0,"fan14_sl":"00000","fan15_addr":0,"fan15_sl":"00000","fan16_addr":0,"fan16_sl":"00000","fan17_addr":0,"fan17_sl":"00000","fan18_addr":0,"fan18_sl":"00000","fan19_addr":0,"fan19_sl":"00000","fan20_addr":0,"fan20_sl":"00000"},"scheduledmode":0,"scheduler":[],"en":0,"sensor_unit":{"unit":0,"min":0,"max":0},"setpoint":{"default":0,"low":0,"high":0},"device":{"did":"GKC-A848FA876488","hw_ver":"1.0.0","fw_ver":"1.0.0.0"},"wifiConfig":{"ssid":"EBM_AP","pwd":"12345678"},"ethConfig":{"ifc":"wifi","iptype":"d","ip":"0.0.0.0","MASK":"0.0.0.0","GW":"0.0.0.0","DNS":"0.0.0.0"},"lang":0}
+      
+        // var lang;
+        // if(gatewayResponse.lang==0){
+        //     lang = 'i18n/de.json'; 
+        // }else if(gatewayResponse.lang==1){
+        //     lang = 'i18n/ge.json'; 
+        // }else if(gatewayResponse.lang==2){
+        //     lang = 'i18n/en.json'; 
+        // }
+        // getLanguage(lang)
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var result = this.responseText;
+                var response = JSON.parse(result.replace(/[\n\r\t]/g, ""));
+                gatewayResponse = response.config;
+                var lang = 'i18n/de.json';
+                if(gatewayResponse.lang==0){
+                    lang = 'i18n/de.json'; 
+                }else if(gatewayResponse.lang==1){
+                    lang = 'i18n/ge.json'; 
+                }else if(gatewayResponse.lang==2){
+                    lang = 'i18n/en.json'; 
+                }else if(gatewayResponse.lang==3){
+                    lang = 'i18n/fr.json'; 
+                }
+               getLanguage(lang)
+            }else{
+              
+            }
+        };
+        xhttp.open("POST", "/ssid_passphrase", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(null);
+        IPtype = 'd';
+    }
+
+ window.onload = function (e) {
+    getSSID();
+        // let lang = localStorage.getItem('Lang');
+        // if (lang == undefined) {
+        //     getLanguage('i18n/en.json')
+        // } else {
+        //     getLanguage(lang)
+        // }
+    }
+    sessionStorage.clear();localStorage.clear();
+    // function to show and hide the username and password field based on the loginType
+    function openMenu(menu) {
+        document.getElementById(menu).classList.toggle("show");
+    }
+        /*Localizatiom*/
+        function getLanguage(lang) {
+            localStorage.setItem('Lang', lang);
+            document.getElementById('language').value = lang;
+            debugger;
+            var xobj = new XMLHttpRequest();
+            xobj.overrideMimeType("application/json");
+            xobj.open('GET', lang, true);
+            xobj.onreadystatechange = function () {
+                if (xobj.readyState == 4 && xobj.status == "200") {
+                    debugger;
+                    langjson = JSON.parse(xobj.responseText);
+                    Object.entries(langjson).forEach(([key, val]) => {
+                        if (document.querySelectorAll('[data-translate="' + key + '"]').length > 0) {
+                            for (var i = 0; i < document.querySelectorAll('[data-translate="' + key + '"]').length; i++) {
+                                document.querySelectorAll('[data-translate="' + key + '"]')[i].innerHTML = val;
+                                if (document.querySelectorAll('[data-translate="' + key + '"]')[i].placeholder != undefined) {
+                                    document.querySelectorAll('[data-translate="' + key + '"]')[i].placeholder = val;
+                                }
+                            }
+                        }
+                    });
+                }
+            };
+            xobj.send(null);
+        }
+
+    function loginType (x) {
+        debugger;
+        var usertype= "enduser";
+        if(x==0){
+            usertype = "installer";
+        }else if(x==1){
+            usertype = "zehnder"
+        }
+        var encryptval = btoa(usertype);
+    
+        sessionStorage.setItem('userrole', encryptval);
+        if (usertype == "installer" || usertype == "zehnder") {
+            document.getElementById("username").style.display = 'block';
+            document.getElementById("password").style.display = 'block';
+        } else {
+            document.getElementById("username").style.display = 'none';
+            document.getElementById("password").style.display = 'none';
+            document.forms["login"]["username"].value='';
+            document.forms["login"]["password"].value='';
+        }
+    }
+
+    window.addEventListener("storage", function () {
+        var usertype= "enduser";
+        if(document.forms["login"]["type"].value==0){
+            usertype = "installer";
+        }else if(document.forms["login"]["type"].value==1){
+            usertype = "zehnder"
+        }
+        sessionStorage.setItem('userrole', btoa(usertype));
+    }, false);
+
+    /*Validating Alpha numeric*/
+    function allowAlphaNumericSpace(e) {
+        var regex = new RegExp("^[\\$#\\+{}:\\?\\.,~@\\-\"a-zA-Z0-9 ]+$");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        e.preventDefault();
+        return false;
+    }
+    //function onenter submit//
+    const form = document.getElementById("login-form");
+  
+    form.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            submitData();
+        }
+    });
+
+    // function to submit data
+    function submitData() {
+        var username = document.forms["login"]["username"].value;
+        var password = document.forms["login"]["password"].value;
+        var type = parseInt(document.forms["login"]["type"].value);
+        var lang;
+        if(document.getElementById('language').value =='i18n/de.json'){
+            lang = 0; 
+        }else if(document.getElementById('language').value =='i18n/ge.json'){
+            lang = 1; 
+        }else if(document.getElementById('language').value  =='i18n/en.json'){
+            lang = 2; 
+        }else if(document.getElementById('language').value  =='i18n/fr.json'){
+            lang = 3; 
+        }
+        
+            if ((document.forms["login"]["type"].value != '2') && (username == "" || password == ''))  {
+                document.getElementById("alert_error").classList.add("show");
+                document.getElementById("error_msg").innerHTML = 'Please fill all the fields';
+                return false;
+            } else {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        debugger;
+                        document.getElementById("alert_error").classList.remove("show");
+                        document.getElementById("error_msg").innerHTML = '';
+                        var result = this.responseText;
+                        if (result == "Login_PASS") {
+                            document.getElementById("alert_success").classList.add("show");
+                            document.getElementById("success_msg").innerHTML = 'You are successfully logged in, we are redirecting to configuration page';
+                            setTimeout(function(){ 
+                                window.location.href = "/zehnder_app"
+                            }, 1000);
+                            
+                        } else {
+                            document.getElementById("alert_error").classList.add("show");
+                            document.getElementById("error_msg").innerHTML = 'Invalid Username/Password';
+                        }
+                    }
+                };
+                xhttp.open("POST", "/login_val", true);
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.send(JSON.stringify({
+                    type: type,
+                    username: username,
+                    password: password,
+                    lang: lang
+                }));
+                //window.location.href = "access_point.html";
+                return false;
+            }
+    }
+</script>
+
+</html>

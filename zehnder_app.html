@@ -1,0 +1,3592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
+    <link rel="icon" type="image/x-icon" href="img/icon_img.png">
+    <link rel="stylesheet" href="style.css">
+    <!--<script src="assets/pollyfill.js"></script> -->
+    <!-- <link rel="stylesheet" href="assets/jquery.timepicker.min.css"> -->
+    <title>Zehnder</title>
+</head>
+
+<body id="body-container">
+    <div class="loader" id="page_loader" style="display:none">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="header">
+        <div class="content">
+            <div class="logo-img">
+                <div class="logo-info">
+                    <img src="img/logo_img.png" alt="" width="100">
+                    <!-- <p style="margin: 0px;align-self: end;">always the <br> best climate</p> -->
+                </div>
+                <div class="current-date"> <span id="time"></span> </div>
+                <div class="device-info">
+
+                    <div class="mobile-view-header">
+                        <div class="drop-down language" onclick="openMenu('language_menu')" id="language_menu"
+                            style="margin-right: 30px">
+                            <div style="display: flex;align-items:center">
+                                <img src="img/globe.png" width="15" alt="Language">
+                                <select id="language" onchange="getLanguage(this.value)">
+                                    <option value="i18n/en.json" title="English">En</option>
+                                    <option value="i18n/ge.json" title="German">Ge</option>
+                                    <option value="i18n/de.json" title="Deutch">De</option>
+                                    <option value="i18n/fr.json" title="French">Fr</option>
+                                </select>
+                                <span class="chevron top"></span>
+                            </div>
+
+                        </div>
+                        <div class="drop-down header_menu" id="header_menu_mobile" style="margin-left: 10px;">
+                            <div>
+                                <a href="javascript:;" class="dropbtn" onclick="openMenu('header_menu_mobile')">
+                                    <span><img src="img/user_solid.png" width="15"></span></a>
+                                <span class="chevron top"></span>
+                            </div>
+                            <div class="dropdown-content" id="dropdown">
+                                <h4 style="margin: 0px;padding: 10px 15px;font-size: 13px;" id="mobile_user_info"></h4>
+                                <ul>
+                                    <!-- <li id="link_upload"
+                                        onclick="document.getElementById('template_upload').style.display = 'flex';document.getElementById('header_menu_mobile').classList.remove('show');">
+                                        <a href="#">Upload Config</a></li>
+                                    <li id="link_download" onclick="downloadData()"><a href="#">Download Config</a></li> -->
+                                    <li id="link_upgrade"
+                                        onclick="document.getElementById('firmware_upgrade').style.display = 'flex';document.getElementById('header_menu_mobile').classList.remove('show');">
+                                        <a href="#">Firmware Upgrade</a></li>
+                                    <li onclick="logout()"><a href="#" data-translate="logout">Logout</a></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <h5 id="device_id" class="device_id"></h5>
+                    <small id="version"></small>
+                </div>
+            </div>
+
+            <div class="profile-sec">
+
+                <!-- <div class="drop-down language" onclick="openMenu('language_menu')" id="language_menu"
+                    style="margin-right: 30px">
+                    <div style="display: flex;align-items:center">
+                        <img src="img/globe.png" width="15" alt="Language">
+                        <select id="language" onchange="getLanguage(this.value)">
+                            <option value="i18n/en.json">English</option>
+                            <option value="i18n/ge.json">German</option>
+                            <option value="i18n/de.json">Dutch</option>
+                        </select>
+                        <span class="chevron top"></span>
+                    </div>
+
+                </div> -->
+                <div class="drop-down header_menu" id="header_menu">
+
+                    <div>
+                        <a href="javascript:;" class="dropbtn" onclick="openMenu('header_menu')">
+                            <span><img src="img/user_solid.png" width="15"> <span id="user_info"></span></span></a>
+                        <span class="chevron top"></span>
+                    </div>
+                    <div class="dropdown-content">
+                        <ul>
+                            <!-- <li id="link_upload_web"
+                                onclick="document.getElementById('template_upload').style.display = 'flex'; document.getElementById('header_menu').classList.remove('show');">
+                                <a href="#">Upload Config</a></li>
+                            <li id="link_download_web" onclick="downloadData()"><a href="#">Download Config</a></li> -->
+                            <li id="link_upgrade_web"
+                                onclick="document.getElementById('firmware_upgrade').style.display = 'flex'; document.getElementById('header_menu').classList.remove('show');">
+                                <a href="#">Firmware upgrade</a></li>
+                            <li id="language_menu" onclick="selectedLanguage();document.getElementById('language-popup').style.display = 'flex'; document.getElementById('header_menu').classList.remove('show');"><a href="#">Language</a></li>  
+                            <li onclick="logout()"><a href="#" data-translate="logout">Logout</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <!-- <div style="text-align: right;" class="action-ctrl">
+            <a href="javascript:;" onclick="downloadData()"><img src="img/download.png" width="12"> Download</a>
+            <a href="javascript:;" onclick=""><img src="img/upload.png" width="12"> Upload</a>
+        </div> -->
+        <div class="content-area">
+            <div class="tab">
+                <button class="tablinks" id="defaultOpen" style="margin-left: 5%;"
+                    onclick="openPage(event, 'interface')"><span data-translate="Basic Settings">Basic
+                        Settings</span></a>
+                    <button class="tablinks" id="tab2" onclick="openPage(event, 'adv_settings')"><span
+                            data-translate="Advanced Settings">Advanced Settings</span> </button>
+                    <button class="tablinks" id="tab5" onclick="openPage(event, 'time_scheduler')"><span
+                            data-translate="Time Scheduler">Time Scheduler</span> </button>
+                    <button class="tablinks" id="tab3" onclick="openPage(event, 'internet_settings')"><span
+                            data-translate="Network Settings">Network Settings</span></button>
+                    <button class="tablinks" id="tab4" onclick="openPage(event, 'live_data')"><span
+                            data-translate="Live data">Live Data</span> </button>
+            </div>
+            <div class="form_card">
+                <form name="config_form" id="config_form" action="/access_point_val" method="post"
+                    onsubmit="return finalSubmit()">
+                    <div id="interface" class="tabcontent tab1" style="display: block;">
+                        <div class="form-inline">
+                            <label class="sub-title" style="margin-bottom: 10px;"><b
+                                    data-translate="Operation mode">Operation mode</b></label>
+                                    <div class="field-area">
+                                        <div class="radio-group">
+                                            <label for="1">
+                                                <input type="radio" id="1" name="opmode" value="1"> <span
+                                                    data-translate="Pressure Control">Pressure Control</span>
+                                            </label>
+                                            <label for="2">
+                                                <input type="radio" id="2" name="opmode" value="2" > <span
+                                                    data-translate="Manual control over 0-10V"> 0-10V input - variable control</span>
+                                            </label>
+                                            <label for="3">
+                                                <input type="radio" id="3" name="opmode" value="3" > <span
+                                                    data-translate="Manual control over 2 steps"> 0-10V input - 2 level control</span>
+                                            </label>
+                                            <label for="4">
+                                                <input type="radio" id="4" name="opmode" value="4" checked> <span
+                                                    data-translate="Manual control via Modbus"> Direct control via Modbus TCP</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                        </div>
+
+                        <div id="motor_enable" style="display: none;">
+                            <hr />
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b data-translate="motor_enable">Motor Stop Enable</b></label>
+                                <!-- <div class="form-group form-row">
+                                    <div class="toggle" style="display: flex;column-gap:20px;">
+                                        <input type="checkbox" value="" name="motor_enable" />
+                                        <label></label>
+                                    </div>
+                                </div> -->
+                                <div class="field-area">
+                                    <div class="radio-group">
+                                        <label for="motor-enable">
+                                            <input type="radio" id="motor-enable" name="motor_enable" value="1"> <span
+                                                data-translate="On">On</span>
+                                        </label>
+                                        <label for="motor-disable">
+                                            <input type="radio" id="motor-disable" name="motor_enable" value="0" checked> <span
+                                                data-translate="Off">Off</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="scheduled_mode">
+                            <hr />
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b data-translate="Scheduled mode">Scheduler</b></label>
+                                <div class="field-area">
+                                    <div class="radio-group">
+                                        <label for="sch_1" onclick="selectScheduledMode(1)">
+                                            <input type="radio" id="sch_1" name="scheduled_mode" value="1" checked>
+                                            <span data-translate="Scheduled">Active</span>
+                                        </label>
+                                        <label for="sch_0" onclick="selectScheduledMode(0)">
+                                            <input type="radio" id="sch_0" name="scheduled_mode" value="0"> <span
+                                                data-translate="Non Scheduled">Non-active</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div id="setpoin" style="display: block;">
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b data-translate="Set Point">Set Point </b><span id="spunit" style="font-weight: bold;"></span>
+                                </label>
+                                <div class="form-group form-row">
+                                    <input type="text" class="form-control small-input" maxlength="20" value=""
+                                        name="setpoint" data-translate="Set Point" placeholder="Set point" id="setpoint"
+                                        onkeypress="isNumber(this)" onblur="validate(this)" onkeyup="isNumber(this)"
+                                        required>
+
+                                </div>
+
+                                <small id="setpoint_error" style="color: red;margin-left: 5px;"></small>
+                            </div>
+                            <hr />
+                        </div>
+                        <div id="multiple_setpoint" style="display: none">
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b data-translate="Set Point">Set Point</b><span id="unit"
+                                        style="font-weight: bold;"> (%)</span></label>
+                                <div class="form-group form-row multiple-input">
+                                    <input type="text" class="form-control" data-label="Low" maxlength="20"
+                                        name="multiplemin" value="" id="multiplemin" placeholder="Low"
+                                        onkeypress="isNumber(this)" onblur="validate(this)" onkeyup="isNumber(this)"
+                                        required>
+                                    <label data-translate="Low">Low</label>
+                                </div>
+                                <div class="form-group form-row multiple-input">
+                                    <input type="text" class="form-control" maxlength="20" name="multiplemax"
+                                        data-label="High" value="" id="multiplemax" placeholder="High"
+                                        onkeypress="isNumber(this)" onblur="validate(this)" onkeyup="isNumber(this)"
+                                        required>
+                                    <label data-translate="High">High</label>
+                                </div>
+                                <small id="multiplemax_error" style="color: red;margin-right: 10px;"></small>
+                                <small id="multiplemin_error" style="color: red;margin-right: 10px;"></small>
+                                <small id="multipleminmax_error" style="color: red;"></small>
+                            </div>
+                            <hr />
+                        </div>
+                        <div id="fixedfanspeed_div">
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b data-translate="Fixed Fan Speed">Fixed Fan Speed </b><span
+                                        style="font-weight: bold;"> (%) </span></label>
+                                <div class="form-group form-row multiple-input">
+                                    <input type="text" class="form-control" data-label="Min" maxlength="20"
+                                        name="fixedfspeedmin" value="" id="fixedfspeedmin" placeholder="Min"
+                                        onkeypress="isNumber(this)" onblur="validate(this)" onkeyup="isNumber(this)"
+                                        required>
+                                    <label data-translate="Min">Min</label>
+                                </div>
+                                <div class="form-group form-row multiple-input">
+                                    <input type="text" class="form-control" maxlength="20" name="fixedfspeedmax"
+                                        value="" id="fixedfspeedmax" placeholder="Max" onkeypress="isNumber(this)"
+                                        onblur="validate(this)" onkeyup="isNumber(this)" required>
+                                    <label data-translate="Max">Max</label>
+                                </div>
+                                <small id="fixedfspeedmax_error" style="color: red;"></small>
+                                <small id="fixedfspeedmin_error" style="color: red;"></small>
+                                <small id="fixedfspeedminmax_error" style="color: red;"></small>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Advanced Settings -->
+                    <div id="adv_settings" class="tabcontent tab2">
+                        <!-- <div class="form-inline form-center disabled">
+                            <label class="sub-title"><b>Enable Digital input </b></label>
+                            <div class="form-group form-row">
+                                <div class="toggle">
+                                    <input type="checkbox" />
+                                    <label></label>
+                                </div>
+                            </div>
+                            <small id="statusdevice_error" style="color: red;"></small>
+                        </div> -->
+                        <div class="form-inline" style="margin-top: 40px;">
+                            <label class="sub-title"><b data-translate="Sensor's unit">Measuring unit </b></label>
+                            <div class="form-group form-row">
+                                <div class="toggle">
+                                    <input type="checkbox" value="" name="sensor_enabled" onchange="enablefields()" />
+                                    <label></label>
+                                </div>
+                                <div class="radio-group radio-inline disabled" id="sensor_unit_field">
+                                    <label for="" onclick=""> <input type="radio" name="sensor_unit" value="0"  selected> &#x2103;
+                                    </label>
+                                    <label for="" onclick=""> <input type="radio" name="sensor_unit" value="1"> Pa
+                                    </label>
+                                    <label for="" onclick=""> <input type="radio" name="sensor_unit" value="2">
+                                        CO2 </label>
+                                    <label for="" onclick=""> <input type="radio" name="sensor_unit" value="3">
+                                        ppm </label>
+                                </div>
+                                <div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-inline form-center disabled" id="sensor_minmax_field">
+                            <label class="sub-title">&nbsp;</label>
+                            <div class="form-row form-group multiple-input">
+                                <input type="text" class="form-control" maxlength="20" name="sensor_min" value=""
+                                    id="sensor_min" placeholder="Min" onkeypress="isNumber(this)"
+                                    onblur="validate(this)" onkeyup="isNumber(this)" required>
+                                <label data-translate="Min">Min</label>
+                            </div>
+                            <div class="form-row form-group multiple-input">
+                                <input type="text" class="form-control" maxlength="20" name="sensor_max" value=""
+                                    id="sensor_max" placeholder="Max" onkeypress="isNumber(this)"
+                                    onblur="validate(this)" onkeyup="isNumber(this)" required>
+                                <label data-translate="Max">Max</label>
+                            </div>
+                            <small id="sensor_min_error" style="color: red;margin-right: 10px;"></small>
+                            <small id="sensor_max_error" style="color: red;"></small>
+
+                        </div>
+                        <div id="temSetpoint" style="display: block;">
+                            <hr />
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b>P/I Factor </b></label>
+                                <div>
+                                    <div class="adv_settings" id="factor">
+                                        <div class="form-group form-row">
+                                            <input type="text" class="form-control" maxlength="20" value="" name="pfactor"
+                                                placeholder="Proportional Band(%)" data-translate="P-Factor(%)" id="pfactor"
+                                                onblur="validate(this)" onkeypress="isNumber(this)" onkeyup="isNumber(this)"
+                                                required>
+                                            <label data-translate="P-Factor(%)">Proportional Band(%)</label>
+                                        </div>
+                                        <div class="form-group form-row">
+                                            <input type="text" class="form-control" maxlength="20" value="" name="ifactor"
+                                                placeholder="Integral time(%)" id="ifactor" data-translate="I-Factor(%)"
+                                                onblur="validate(this)" onkeypress="isNumber(this)" onkeyup="isNumber(this)"
+                                                required>
+                                            <label data-translate="I-Factor(%)">Integral time(%)</label>
+                                        </div>
+                                      
+                                    </div>
+                                    <div id="reset"><a onclick="resetpifactor()" id="resetfactor" class="link">Reset P/I Factor</a></div>
+                                </div>
+                                <small id="pfactor_error" style="color: red;"></small>
+                                <small id="ifactor_error" style="color: red;"></small>
+                            </div>
+                        </div>
+                        <div id="ctrl_behavior">
+                            <hr />
+                            <div class="form-inline form-center">
+
+                                <label class="sub-title"><b data-translate="Control Behavior">Control
+                                        Behavior</b></label>
+                                <div class="radio-group">
+                                    <label for="ctrlbehavior1">
+                                        <input type="radio" id="ctrlbehavior1" name="ctrlbehavior" value="0" checked>
+                                        <span data-translate="Positive (heating)"> Positive (heating)</span> </label>
+                                    <label for="ctrlbehavior2">
+                                        <input type="radio" id="ctrlbehavior2" name="ctrlbehavior" value="1"> <span
+                                            data-translate="Negative (cooling)">Negative (cooling)</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="adv_senadj" style="display: block;">
+                            <hr />
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b data-translate="Pressure">Pressure </b></label>
+                                <div class="form-group form-row ad_settings">
+                                    <input type="text" class="form-control" maxlength="20" name="sensoradj" value=""
+                                        placeholder="Sensor Adjustment" data-translate="Sensor Adjustment"
+                                        id="sensoradj" onblur="validate(this)" onkeypress="isNumber(this)"
+                                        onkeyup="isNumber(this)" required>
+                                    <label data-translate="Sensor Adjustment">Sensor Adjustment</label>
+                                </div>
+                                <small id="sensoradj_error" style="color: red;"></small>
+                            </div>
+                        </div>
+
+
+                        <div id="adv_senadj" style="display: block;">
+                            <hr />
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b data-translate="">Upload the configuration template</b></label>
+                                <div class="form-group form-row">
+                                    <div class="template-popup">
+                                        <div class=""  style="display: flex;align-items: baseline;">
+                                            <input id="csv" type="file" title="" accept=".xlsx" class="form-control" style="padding: 0px;">
+                                            <div style="margin: 0 3px;"></div>
+                                            </div>
+                                            
+                                        <button class="btn btn-primary" onclick="uploadfile()" data-translate="upload"
+                                                style="margin-right: 10px;">Upload</button> 
+                                                <a class="btn btn-secondary" href="javascript:;"
+                                                onclick="  document.getElementById('csv').value = '';document.getElementById('template_upload').style.display = 'none';">Cancel</a> 
+                                        <a href="javascript:;" class="link" onclick="downloadData()">Download Template</a>
+                                                       
+                                    </div>                            
+                                </div>
+                                
+                                <small id="sensoradj_error" style="color: red;"></small>
+                            </div>
+                           
+                        </div>
+                    </div>
+
+                    <div id="time_scheduler" class="tabcontent tab5" style="position: relative;">
+                        <div id="timesegment">
+                            <div id="add_segment">
+                                <div class="form-inline form-center">
+                                    <label class="sub-title"><b data-translate="segmentconfig">Time
+                                            Scheduler Configuration </b></label>
+                                    <div class="form-group form-row">
+                                        <button class="btn btn-primary" id="" type="button"
+                                            onclick="openTimeScheduler()"> &#43 <span
+                                                data-translate="Add Time Scheduler">Add Time Scheduler</span></button>
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+
+                            <div id="scheduler_section">
+                                <div class="form-inline form-center">
+                                    <label class="sub-title"><b data-translate="Time Scheduler">Time Scheduler
+                                        </b></label><span style="color: #E2001A;" id="noTimeschedule"
+                                        data-translate="notconfigured">Time segment is not configured</span>
+
+
+                                </div>
+                                <div class="timechart" id="timechart" style="margin-top: 10px"></div>
+                                <div id="edit_segment" style="margin-top: 20px; display: none;">
+                                    <a href="javascript:;" class="text-primary link" onclick="openTimeScheduler()"><img
+                                            src="img/pencil.png" width="10"> <span
+                                            data-translate="Edit time scheduler">Add/Edit
+                                            time scheduler</span></a>
+                                    <a href="javascript:;" style="margin-left:20px" class="text-primary link"
+                                        onclick="document.getElementById('delete_msg').style.display = 'flex'"><img
+                                            src="img/delete.png" width="10"> <span
+                                            data-translate="Delete all scheduler">Delete all scheduler</span></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="internet_settings" class="tabcontent tab3" style="position: relative;">
+                        <div class="form-inline">
+                            <label class="sub-title"style="margin-bottom: 10px;"><b  data-translate="connection" >Connection type</b></label>
+                            <div>
+                                <div class="radio-group">
+                                    <label for="ethernet">
+                                        <input type="radio" id="ethernet" name="NetworkInterface" value="eth"
+                                            onclick="wifiDisable()" data-translate="ethernet" checked> <span  data-translate="ethernet">Ethernet</span> </label>
+                                    <label for="wifi">
+                                        <input type="radio" id="wifi" name="NetworkInterface" value="wifi"
+                                            onclick="wifiDisable()" data-translate="wifi"> <span  data-translate="wifi">WiFi</span>  </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ip_fields">
+                            <hr />
+                            <div class="form-inline">
+                                <label class="sub-title" style="margin-bottom: 10px;"><b data-translate="iptype">IP type</b></label>
+                                <div class="radio-group">
+                                    <label id="lstatIP" for="statIP">
+                                        <input type="radio" id="statIP" name="IP" value="s" onclick="statIpDisabled()"
+                                            checked><span data-translate="staticip"> Static IP </span></label>
+                                    <label id="ldhcp" for="dynamicIP">
+                                        <input type="radio" id="dynamicIP" name="IP" value="d"
+                                            onclick="statIpDisabled()" data-translate="dynamicip">
+                                       <span data-translate="dynamicip"> Dynamic IP </span> </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="div_ip" style="display: block;width: 100%;">
+                            <hr />
+                            <div class="form-inline form-center">
+                                <label class="sub-title" style="margin-bottom: 10px;"><b data-translate="ipsettings">IP Settings </b></label>
+                                <div class="adv_settings">
+                                    <div class="form-group form-row">
+                                        <input type="text" class="form-control" maxlength="20" name="ip_inp" id="ip_inp"
+                                            onkeypress="allowAlphaNumericSpace(this)" onblur="validate(this)"
+                                            onkeyup="allowAlphaNumericSpace(this)" placeholder="IP" data-translate="IP"
+                                            required>
+                                        <label data-translate="IP">IP</label>
+                                        <small id="ip_inp_error" style="color: red;position: absolute;"></small>
+                                    </div>
+                                    <div class="form-group form-row">
+                                        <input type="text" class="form-control" maxlength="20" name="mask" id="mask"
+                                            onkeypress="allowAlphaNumericSpace(this)" onblur="validate(this)"
+                                            onkeyup="allowAlphaNumericSpace(this)" placeholder="Mask"
+                                            data-translate="Mask" required>
+                                        <label data-translate="Mask">Mask</label>
+                                        <small id="mask_error" style="color: red;position: absolute;"></small>
+                                    </div>
+                                    <div class="form-group form-row">
+                                        <input type="text" class="form-control" maxlength="20" name="gateway"
+                                            id="gateway" onkeypress="allowAlphaNumericSpace(this)"
+                                            onblur="validate(this)" onkeyup="allowAlphaNumericSpace(this)" required
+                                            data-translate="Gateway" placeholder="Gateway"> <label
+                                            data-translate="Gateway">Gateway</label>
+                                        <small id="gateway_error" style="color: red;position: absolute;"></small>
+                                    </div>
+                                    <div class="form-group form-row">
+                                        <input type="text" class="form-control" maxlength="20" name="dns" id="dns"
+                                            onkeypress="allowAlphaNumericSpace(this)" onblur="validate(this)"
+                                            onkeyup="allowAlphaNumericSpace(this)" required data-translate="DNS"
+                                            placeholder="DNS"> <label data-translate="DNS">DNS</label>
+                                        <small id="dns_error" style="color: red;position: absolute;"></small>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!---Wifi Details-->
+                        <div id="wifi_settings" style="display: none;">
+                            <hr />
+                            <div class="form-inline form-center">
+                                <label class="sub-title"><b>Hotspot details</b></label>
+                                <div class="adv_settings">
+                                    <div class="form-group form-row">
+                                        <input type="text" class="form-control" maxlength="20" name="ssid" id="ssid"
+                                            data-translate="SSID" placeholder="SSID" onkeypress="ascii(this)" required
+                                            onkeyup="ascii(this)"> <label data-translate="SSID">SSID</label>
+                                    </div>
+                                    <div class="form-group form-row">
+                                        <input type="password" class="form-control" maxlength="22" name="passphrase"
+                                            id="passphrase" data-translate="Passphrase" placeholder="Passphrase"
+                                            required onkeypress="ascii(this)" onkeyup="ascii(this)"> <label
+                                            data-translate="Passphrase">Passphrase</label>
+                                        <small id="passphrase_error" style="color: red;"></small>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <small id="ssid_error" style="color: red;"></small>
+                        </div>
+
+                    </div>
+                    <div id="live_data" class="tabcontent tab4 live_data" style="position: relative;">
+
+                        <small class="live_timestamp"><em><span data-translate="Last updated on">Last updated
+                                    on</span>:&nbsp; <span id="date_time"> </span></em></small>
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="Actual Speed">Current Speed</b> (rpm) </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="actual_speed"
+                                    data-translate="Actual Speed" placeholder="Actual Speed" id="actual_speed" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="Actual PWM">Actual PWM</b> (%)</label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="actual_pwm"
+                                    data-translate="Actual PWM" placeholder="Actual PWM" id="actual_pwm" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="Actual sensor value">Current sensor value</b> <span id="current_unit">(v)</span>
+                            </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="actual_sensor_value"
+                                    data-translate="Actual sensor value" placeholder="Actual sensor value"
+                                    id="actual_sensor_value" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="Operational hours">Operational hours </b>
+                            </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="operational_hours"
+                                    data-translate="Operational hours" placeholder="Operational hours"
+                                    id="operational_hours" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="Production code fan">Production Code Motor</b>
+                            </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="production_code_fan"
+                                    data-translate="Production code fan" placeholder="Production code fan"
+                                    id="production_code_fan" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="Serial number controller">Serial Number
+                                    Motorcontroller</b> </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="serial_number_controller"
+                                    data-translate="Serial number controller"
+                                    placeholder="Serial Number Motorcontroller" id="serial_number_controller" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="0-10 V input voltage">0-10V input voltage</b>
+                            </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="input_voltage"
+                                    data-translate="0-10 V input voltage" placeholder="0-10V input voltage"
+                                    id="input_voltage" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="production_data">Production Data Controller</b>
+                            </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="prod_data"
+                                    data-translate="production_data" placeholder="Production Data Intelligate"
+                                    id="prod_data" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="snintelligate">SN Intelligate</b> </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="" name="sn_intelligate"
+                                    data-translate="snintelligate" placeholder="SN Intelligate" id="sn_intelligate"
+                                    disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="production_unit">Production Date Customer Unit</b> </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value="160A" name=""
+                                    data-translate="" placeholder="160A" id=""
+                                    disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-inline">
+                            <label class="sub-title" style="color: #E2001A;"><b data-translate="Error">Error</b>
+                            </label>
+                            <div class="form-group form-row">
+                                <em id="error_title" style="color: #198754;" data-translate="noerror">No Error</em>
+                                <ul id="error" style="padding-left: 20px;"> </ul>
+
+                                <!-- <input type="text" class="form-control" value="" name="error_live"
+                                    data-translate="Error" placeholder="Error" id="error_live" disabled> -->
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-inline form-center">
+                            <label class="sub-title"><b data-translate="Last error">Last error</b> </label>
+                            <div class="form-group form-row">
+                                <input type="text" class="form-control" value=""
+                                    name="last_error" data-translate="Last error" placeholder="Last error" id="last_error" disabled>
+                            </div>
+                        </div> -->
+                        <div class="form-inline">
+                            <label class="sub-title" style="color: #E2001A;"><b data-translate="Warning">Warning</b>
+                            </label>
+                            <div class="form-group form-row">
+                                <em id="warning_error_title" style="color: #198754;">No Warning</em>
+                                <ul id="warning_error" style="padding-left: 20px;"> </ul>
+                                <!-- <input type="text" class="form-control" value="" name="warning" data-translate="Warning"
+                                    placeholder="Warning" id="warning" disabled> -->
+                            </div>
+                        </div>
+
+                        <div class="form-inline">
+                            <label class="sub-title" style="color: #E2001A;"><b data-translate="First last error">First
+                                    last error</b> </label>
+                            <div class="form-group form-row">
+                                <em id="first_error_title" style="color: #198754;" data-translate="noerror">No Error</em>
+                                <ul id="first_error" style="padding-left: 20px;"> </ul>
+
+                                <!-- <input type="text" class="form-control" value="" name="first_last_error"
+                                    data-translate="First last error" placeholder="First last error"
+                                    id="first_last_error" disabled> -->
+                            </div>
+                        </div>
+
+                        <div class="form-inline">
+                            <label class="sub-title" style="color: #E2001A;"><b
+                                    data-translate="Second last error">Second last error</b>
+                            </label>
+                            <div class="form-group form-row">
+                                <em id="second_error_title" style="color: #198754;" data-translate="noerror">No Error</em>
+                                <ul id="second_error" style="padding-left: 20px;"> </ul>
+
+                                <!-- <input type="text" class="form-control" value="" name="second_last_error"
+                                    data-translate="Second last error" placeholder="Second last error"
+                                    id="second_last_error" disabled> -->
+                            </div>
+                        </div>
+
+                        <div class="form-inline">
+                            <label class="sub-title" style="color: #E2001A;"><b data-translate="Third last error">Third
+                                    last error</b> </label>
+                            <div class="form-group form-row">
+                                <em id="third_error_title" style="color: #198754;" data-translate="noerror">No Error</em>
+                                <ul id="third_error" style="padding-left: 20px;"> </ul>
+
+                                <!-- <input type="text" class="form-control" value="" name="third_last_error"
+                                    data-translate="Third last error" placeholder="Third last error"
+                                    id="third_last_error" disabled> -->
+                            </div>
+                        </div>
+
+                        <div class="loader" id="live_data_loader" style="display:none">
+                            <div class="lds-roller">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="action-area">
+                    <div id="action_area">
+                        <button class="btn btn-primary" id="action_btn" style="margin-left: 20px;" value=""
+                            onclick="return finalSubmit()" data-translate="Submit">Save</button>
+                    </div>
+
+                    <!-- <button class="btn clear_btn"
+                        onclick="resetData()">
+                        Clear</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Time scheduler Modal-->
+    <div id="timeschedule_modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="loader" id="loader" style="display:none">
+                <div class="lds-roller">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <h3 class="modal-head" data-translate="segmentconfig">Time Segment Configuration</h3>
+
+            <form id="rangeform" name="rangeForm">
+                <div style="position: relative;">
+                    <div id="schedule-fields">
+                        <div id="schedule_1">
+                            <div style="padding: 20px" class="selected-schedule" id="first_schedule">
+                                <div class="form-inline form-center set_enable" id="schedules">
+                                    <h4 class='title-head time'><span data-translate="Schedule">Schedule</span> 1:</h4>
+                                    <div class="schedule-content time_schedule" id="schedules">
+                                        <label><input type="checkbox" id="sun1" class="schedule1" name="schedules"
+                                                value="sun1" onchange="setenable('1', this)"><span
+                                                data-attr='S'></span></label>
+                                        <label><input type="checkbox" id="mon1" class="schedule1" name="schedules"
+                                                value="mon1" onchange="setenable('1', this)"><span
+                                                data-translate="M" ></span></label>
+                                        <label><input type="checkbox" id="tue1" class="schedule1" name="schedules"
+                                                value="tue1" onchange="setenable('1', this)"><span
+                                                data-translate="T"></span></label>
+                                        <label><input type="checkbox" id="wed1" class="schedule1" name="schedules"
+                                                value="wed1" onchange="setenable('1', this)"><span
+                                                data-translate="W"></span></label>
+                                        <label><input type="checkbox" id="thu1" class="schedule1" name="schedules"
+                                                value="thu1" onchange="setenable('1', this)"><span
+                                                data-translate="Thu"></span></label>
+                                        <label><input type="checkbox" id="fri1" class="schedule1" name="schedules"
+                                                value="fri1" onchange="setenable('1', this)"><span
+                                                data-translate="F"></span></label>
+                                        <label><input type="checkbox" id="sat1" class="schedule1" name="schedules"
+                                                value="sat1" onchange="setenable('1', this)"><span
+                                                data-translate="S"></span></label>
+                                    </div>
+                                </div>
+                                <div class="form-inline form-center">
+                                    <label class="sub-title"><b data-translate="Set Point">Set Point</b> <span class="spunit" style="font-weight: bold;"></span></label>
+                                    <div class="form-group form-row">
+                                        <input type="text" class="form-control" data-translate="Set Point"
+                                            placeholder="Set Point" maxlength="20" name="setpoint1" id="setpoint1"
+                                            onkeypress="isNumber(this)" onblur="validate(this)"
+                                            onkeypress="isNumber(this)" required>
+                                    </div>
+                                    <small id="setpoint1_error" style="color: red;margin-left:5px"></small>
+                                </div>
+                                <div class="form-inline form-center">
+                                    <label class="sub-title"><b data-translate="From">From</b></label>
+                                    <div class="form-group form-row">
+                                        <input type="text" id="timepicker_set1_min"
+                                            class="form-control time-polyfill" name="1" onchange="minmaxvalidation(event.target)"/>
+                                        <!-- <select class="range range1 form-control" name="range1-min" id="range1-min"
+                                            onchange="minmaxvalidation(event.target)"></select> -->
+                                        <!-- <div class="arrow inner-field"></div> -->
+                                    </div>
+                                    <label class="sub-title" style="margin-left: 40px;"><b
+                                            data-translate="To">To</b></label>
+                                    <div class="form-group form-row">
+                                        <input type="time" id="timepicker_set1_max"
+                                            class="form-control" name="1" onchange="minmaxvalidation(event.target)"/>
+                                        <!-- <select class="range range1 form-control" name="range1-max" id="range1-max"
+                                            onchange="minmaxvalidation(event.target)"></select> -->
+                                        <!-- <div class="arrow inner-field"></div> -->
+                                    </div>
+                                </div>
+                                <div style="color: red;text-align: center; display: none;" id="error_range1"></div>
+                                <a style="color:red;" data-translate="Delete Segment" id="delete_1"
+                                    onclick="deletesegment('1')">Delete Step<a></a>
+                            </div>
+                            <hr />
+                        </div>
+
+                    </div>
+                    <div class="text-right link" id="add-segment" style="padding:10px 20px">
+                        <a class="link" id="add_segment_link" href="javascript:;" onclick="addTimeSegment()">&#43 <span
+                                data-translate="Add Time Segment">Add Step</span></a>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="action-area" id="action_area">
+                <button class="btn btn-primary" style="margin-left: 20px;" value="" id="btn" onclick="return saveData()"
+                    data-translate="Submit">Submit</button> <a href="javascript:;"
+                    onclick="return closeSchedule()">&#x21bb; <span data-translate="Cancel">Cancel</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-popup" id="success_msg">
+        <div class="success-msg">
+            <h1 data-translate="configupdate">Configuration updated successfully</h1>
+            <hr style="margin: 20px 0px;">
+            <button class="btn btn-primary"
+                onclick=" document.getElementById('success_msg').style.display = 'none';getSSID()">OK</button>
+        </div>
+    </div>
+    <div class="success-popup" id="delete_msg">
+        <div class="success-msg">
+            <h1 data-translate="deletescheduler">Are you sure you want to delete all steps?</h1>
+            <hr style="margin: 20px 0px;">
+            <a href="javascript:;" onclick="document.getElementById('delete_msg').style.display = 'none'; cancelDelete()">&#x21bb; <span
+                    data-translate="Cancel">Cancel</span></a> &nbsp;
+            <button class="btn btn-primary" onclick="deleteall('all')"><span data-translate="OK">OK</span></button>
+        </div>
+    </div>
+    <div class="success-popup" id="error_msg">
+        <div class="success-msg">
+            <h1 data-translate="failed">Configuration update failed</h1>
+            <hr style="margin: 20px 0px;">
+            <button class="btn btn-primary"
+                onclick=" document.getElementById('success_msg').style.display = 'none'; location.reload()"
+                data-translate="OK">OK</button>
+        </div>
+    </div>
+
+    <!-----Template Upload-->
+    <div class="success-popup template-popup" id="template_upload">
+        <div class="success-msg">
+            <h1 data-translate="" class="modal-title" style="margin-top: 0px;">Configuration</h1>
+            <div class="modal-content">
+                <h5 class="sub-title">Upload the configuration template</h5>
+                <div style="text-align: left;margin-bottom: 20px;">
+                    <input id="csv" type="file" title="" accept=".xlsx" class="form-control" style="padding: 0px;">
+                    <!-- <a href="zehnder_template.xlsx" download><img src="img/download.png" width="12"
+                            style="opacity: 0.6;"> Sample Template</a> -->
+                </div>
+            </div>
+            <hr style="margin: 20px 0px;">
+            <div style="margin: 20px;text-align: right;">
+                <a class="btn btn-secondary" href="javascript:;"
+                    onclick="  document.getElementById('csv').value = '';document.getElementById('template_upload').style.display = 'none';">Cancel</a>
+                <button class="btn btn-primary" onclick="uploadfile()" data-translate="upload"
+                    style="margin-right: 10px;">Upload</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!---Language settings -->
+    <div class="success-popup template-popup language-content" id="language-popup">
+        <div class="success-msg">
+            <h1 data-translate="" class="modal-title" style="margin-top: 0px;">Language settings</h1>
+            <div class="modal-content">
+                <h5 class="sub-title">Please choose your language</h5>
+                <!-- <div  class="drop-down language" onclick="openMenu('language_menu')" id="language_menu" style="margin-right: 30px">
+                    <div style="display: flex;align-items:center">
+                        <img src="img/globe.png" width="15" alt="Language">
+                        <select id="language" onchange="getLanguage(this.value)">
+                            <option value="i18n/en.json">English</option>
+                            <option value="i18n/ge.json">German</option>
+                            <option value="i18n/de.json">Dutch</option>
+                        </select>
+                        <span class="chevron top"></span>
+                    </div>
+                </div> -->
+                <div class="lang-content">
+                    <div class="lang-box">            
+                        <label><input type="radio" name="lang" id="en" value="i18n/en.json" onclick="getLanguageVal(this.value, this.id)"><span>English</span></label>
+                      </div>
+                      <div class="lang-box">
+                        <label> <input type="radio" name="lang" id="ge" value="i18n/ge.json" onclick="getLanguageVal(this.value, this.id)"><span>German</span></label>
+                      </div>
+                      <div class="lang-box">                      
+                        <label> <input type="radio" name="lang" id="de" value="i18n/de.json" onclick="getLanguageVal(this.value, this.id)"><span>Dutch</span></label>
+                      </div>
+                      <div class="lang-box">                      
+                        <label> <input type="radio" name="lang" id="fr" value="i18n/fr.json" onclick="getLanguageVal(this.value, this.id)"><span>French</span></label>
+                      </div>
+                </div>
+         </div>
+         <hr style="margin: 20px 0px;">
+            <div style="margin: 20px;text-align: right;">
+                <a class="btn btn-secondary" href="javascript:;" onclick="document.getElementById('language-popup').style.display = 'none';">Cancel</a>
+                <button class="btn btn-primary"
+                onclick="updateLanguage()"
+                data-translate="update" style="margin-right: 10px;">Update</button>
+               
+            </div> 
+        </div>
+    </div>
+
+    <!--- alert pop-up -->
+    <div class="success-popup template-popup" id="alert-popup">     
+        <div class="success-msg alert-msg">
+            <h1 data-translate="" class="modal-title" style="margin-top: 0px;">Confirm Navigation</h1>
+            <div class="modal-content">
+                <h5 class="sub-title">You have unsaved changes!. Are you sure you want to leave this page?</h5>  
+            </div>
+         <hr style="margin: 20px 0px;">
+            <div style="margin: 20px;text-align: right;">
+                <a class="btn btn-secondary" href="javascript:;" onclick="document.getElementById('alert-popup').style.display = 'none';">Stay on this page</a>
+                <button class="btn btn-primary"
+                onclick="exit()"
+                data-translate="update" style="margin-right: 10px;">Leave this page</button>
+            </div> 
+        </div>
+    </div>
+
+    <!-----Template Upload-->
+    <div class="success-popup template-popup" id="firmware_upgrade">
+        <div class="loader" id="fw_loader" style="display:none; flex-direction: column;">
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <p>Uploading your file. Please wait a few moments...</p>
+        </div>
+        <div class="success-msg">
+            <h1 data-translate="" class="modal-title" style="margin-top: 0px;">Firmware Upgrade</h1>
+            <div class="modal-content">
+                <h5 class="sub-title">Upload the binary from your device</h5>
+                <div style="text-align: left;margin-bottom: 20px;">
+                    <input id="firmware" name="firmware" type="file" title=""
+                        placeholder="Choose the binary file from your device" accept=".bin" class="form-control"
+                        style="padding: 0px;" onchange="fileValidation(this)">
+
+                </div>
+            </div>
+            <hr style="margin: 20px 0px;">
+            <div style="margin: 20px;text-align: right;">
+                <a class="btn btn-secondary" href="javascript:;"
+                    onclick="document.getElementById('firmware').value = '';document.getElementById('firmware_upgrade').style.display = 'none';">Cancel</a>
+                <button class="btn btn-primary" onclick="uploadfirmware()" data-translate="upload"
+                    style="margin-right: 10px;">Upload</button>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- <div style="text-align:center"><small>Version - V1.2</small></div> -->
+
+    <div class="alert success" id="alert_success">
+        <span class="closebtn" onclick="this.parentElement.classList.remove('show');">&times;</span>
+        <strong data-translate="Success">Success!</strong> <span id="success_msg_alert"></span>
+    </div>
+    <div class="alert warning" id="alert_error">
+        <span class="closebtn" onclick="this.parentElement.classList.remove('show')">&times;</span>
+        <strong data-translate="Oops">Oops!</strong> <span id="error_msg_alert"></span>
+    </div>
+</body>
+
+<script src="xlsx.min.js"></script>
+
+<script src="assets/polyfill_new.js"></script> 
+
+
+<!-- <script src="assets/jquery.min.js"></script>
+<script src="assets/jqueryui.min.js"></script>
+<script src="assets/jquery.timepicker.js"></script> -->
+<script>
+    getTime();
+
+    var lastCheckboxId;
+    var newCheckboxId;
+    
+
+    // Get all checkbox elements on the page
+    var checkboxes = document.querySelectorAll('input[name="opmode"]');
+
+    // Add event listener to each checkbox
+    checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener('click', function(event) {
+        lastCheckboxId = newCheckboxId;
+        newCheckboxId = event.target.id;
+        checkOperatingMode(event, lastCheckboxId);
+    });
+    });
+
+    function cancelDelete(){
+       document.getElementById('delete_msg').style.display = 'none';
+       var mode = document.querySelector('input[name="opmode"]:checked').value;
+       selectOperatingMode(mode);
+       setTimeout(()=>{
+           if( document.getElementById(mode)) document.getElementById(mode).checked = true;
+        }, 500)
+    }
+    /*TimePicker*/
+    //    (function($) {
+    //     $(function() {
+    //         $('input.time_picker_input').timepicker({
+    //             timeFormat: 'h:mm p',
+    //             interval: 10,
+    //             minTime: '00',
+    //             maxTime: '11:59pm',
+    //             defaultTime: '8',
+    //             startTime: '12:00 am',
+    //             dynamic: false,
+    //             dropdown: true,
+    //             scrollbar: true
+    //         });
+    //     });
+    //     })(jQuery);
+
+    function displayTime() {
+        var date = new Date();
+        var options = {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric"
+        };
+        var dateTime = date.toLocaleDateString("en-US", options);
+        document.getElementById("time").innerHTML = dateTime;
+    }
+
+
+    setInterval(getTime, 60 * 1000);
+    try {
+        if (sessionStorage.getItem('userrole') == null) {
+            window.location.href = '/'
+        }
+        debugger;
+        var userRole = atob(sessionStorage.getItem('userrole'));
+    } catch (e) {
+        window.location.href = '/'
+    }
+
+    window.addEventListener("storage", function () {
+        sessionStorage.setItem('userrole', btoa(userRole));
+    }, false);
+    if (userRole == '' || userRole == null) {
+        window.location.href = '/'
+    }
+
+    function fileValidation($event) {
+        var filePath = $event.value;
+        var notallowExtension = /(\.js|\.html|\.css|\.jpg|\.jpeg|\.png|\.gif|\.txt|\.csv|\.xlsx)$/i;
+        if (notallowExtension.exec(filePath)) {
+            alert('Invalid file type');
+            $event.value = '';
+            return false;
+        }
+    }
+    function uploadfirmware() {
+        const csvFile = document.getElementById("firmware");
+        const input = csvFile.files[0];
+        const reader = new FileReader();
+        var upload_path = '/' + 'fwu_over_web';
+        document.getElementById("fw_loader").style.display = 'flex';
+       
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function () {
+            // document.getElementById("fw_loader").style.display = 'none';
+           
+            var result = this.responseText;
+                if (result == "OTA_PASS") {
+                    document.getElementById("fw_loader").style.display = 'none';
+                    document.getElementById('firmware_upgrade').style.display = 'none';
+                    document.getElementById("alert_success").style.display = 'block';
+                    document.getElementById("alert_success").classList.add("show");
+                    document.getElementById("success_msg_alert").innerHTML = 'Gateway updated Successfully';
+                    setTimeout(()=>{
+                        location.href='/'
+                    }, 5000)
+                   
+                    return false;
+                } else if (result == "OTA_FAIL") {
+                    document.getElementById("fw_loader").style.display = 'none';
+                    document.getElementById('firmware_upgrade').style.display = 'none';
+                    // alert("Server closed the connection abruptly!");
+                    document.getElementById("alert_error").style.display = 'block';
+                    document.getElementById("alert_error").classList.add("show");          
+                    document.getElementById("error_msg_alert").innerHTML = 'Gateway update failed!';
+                   
+                } 
+                // else {
+                //     document.getElementById("alert_error").classList.add("show");
+                //     document.getElementById("alert_error").style.display = 'none';
+                //     document.getElementById("error_msg_alert").innerHTML = 'An error encountered when uploading file to the server';
+                //     alert(this.status + " Error!\n" + this.responseText);
+
+                // }
+            if (this.readyState == 4) {
+              
+            } else {
+                document.getElementById("firmware").value = '';
+            }
+        };
+
+        xhttp.open("POST", upload_path, true);
+        xhttp.send(input);
+
+        if (input == undefined) {
+            document.getElementById("alert_error").classList.add("show");
+            document.getElementById("error_msg_alert").innerHTML = 'Please upload the file';
+        } else {
+            document.getElementById("alert_error").classList.remove("show");
+            document.getElementById("error_msg_alert").innerHTML = '';
+        }
+        reader.readAsBinaryString(input);
+    }
+
+    function hidealert() {
+        document.getElementById("alert_error").classList.remove("show");
+        document.getElementById("error_msg_alert").innerHTML = ' ';
+    }
+
+    var newHashmap = {};
+    function uploadfile() {
+        const csvFile = document.getElementById("csv");
+        const input = csvFile.files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            var data = e.target.result;
+            var workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+
+            var result = {};
+            workbook.SheetNames.forEach(function (sheetName) {
+                var roa = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                if (roa.length > 0) {
+                    result[sheetName] = roa;
+                }
+                var xlRes = []
+                newHashmap = {};
+                Object.values(result.Response).forEach((key) => {
+                    if (key.Settings != '') {
+                        newHashmap[key.Settings] = key.Value;
+                    }
+                });
+
+                var keysArr = Object.keys(newHashmap);
+                var mismatches=[];
+                var originalArr = [
+                    "opmode",
+                    "fixedspeedmax",
+                    "fixedspeedmin",
+                    "pfactor",
+                    "ifactor",
+                    "cfunc",
+                    "sensoradj",
+                    "scheduler",
+                    "scheduledmode",
+                    "mtr_stop_en",
+                    "measuring_unit_enable",
+                    "measuring_unit",
+                    "measuring_unit_min",
+                    "measuring_unit_max",
+                    "default_setpoint",
+                    "setpoint_low",
+                    "setpoint_high",    
+                    "ifc",
+                    "iptype",
+                    "ip",
+                    "mask",
+                    "gateway",
+                    "dns",
+                    "ssid",
+                    "password"
+                ]
+              
+                for (let i = 0; i < originalArr.length; i++) {
+                    if (keysArr.indexOf(originalArr[i]) === -1) {
+                        mismatches.push(originalArr[i]);
+                    }
+                    
+                }
+                console.log(mismatches);
+                if (mismatches.length > 0) {
+                    // for (let i = 0; i < mismatches.length; i++) {
+                        alert("There is a problem with the following configuration key/s. Make sure the template file is correct and upload it again\n"+ mismatches);
+                        document.getElementById('csv').value = '';
+                        return false;
+                    // }
+                }
+                
+                if (newHashmap.opmode != 1 && newHashmap.opmode != 2 && newHashmap.opmode != 3 && newHashmap.opmode != 4) {
+                    document.getElementById("alert_error").classList.add("show");
+                    document.getElementById("error_msg_alert").innerHTML = 'You have chosen invalid operation mode. Please try again';
+                    document.getElementById('csv').value = "";
+                    setTimeout(() => {
+                        hidealert();
+                    }, 1500)
+                    return false;
+                } else if (newHashmap?.scheduledmode != 0 && newHashmap?.scheduledmode != 1) {
+                    document.getElementById("alert_error").classList.add("show");
+                    document.getElementById("error_msg_alert").innerHTML = 'You have chosen invalid schedule mode. Please try again';
+                    document.getElementById('csv').value = "";
+                    setTimeout(() => {
+                        hidealert();
+                    }, 1500)
+                    return false;
+                } else if (newHashmap?.cfunc != 0 && newHashmap?.cfunc != 1) {
+                    document.getElementById("alert_error").classList.add("show");
+                    document.getElementById("error_msg_alert").innerHTML = 'You have chosen invalid Control Behavior. Please try again';
+                    document.getElementById('csv').value = "";
+                    setTimeout(() => {
+                        hidealert();
+                    }, 1500)
+                    return false;
+                } else if (newHashmap?.measuring_unit_enable != 0 && newHashmap?.measuring_unit_enable != 1) {
+                    document.getElementById("alert_error").classList.add("show");
+                    document.getElementById("error_msg_alert").innerHTML = 'Invalid Measuring Unit. Please try again';
+                    document.getElementById('csv').value = "";
+                    setTimeout(() => {
+                        hidealert();
+                    }, 1500)
+                    return false;
+                } else if (newHashmap.measuring_unit != 0 && newHashmap.measuring_unit != 1 && newHashmap.measuring_unit != 2 && newHashmap.measuring_unit != 3) {
+                    document.getElementById("alert_error").classList.add("show");
+                    document.getElementById("error_msg_alert").innerHTML = 'You have chosen invalid measuring unit. Please try again';
+                    document.getElementById('csv').value = "";
+                    setTimeout(() => {
+                        hidealert();
+                    }, 1500)
+                    return false;
+                } else if ((newHashmap.opmode == 2 || newHashmap.opmode == 3) && newHashmap.mtr_stop_en != 0 && newHashmap.mtr_stop_en != 1) {
+                    document.getElementById("alert_error").classList.add("show");
+                    document.getElementById("error_msg_alert").innerHTML = 'You have chosen invalid motor stop enable. Please try again';
+                    document.getElementById('csv').value = "";
+                    setTimeout(() => {
+                        hidealert();
+                    }, 1500)
+                    return false;
+                }
+
+
+
+                if (newHashmap.range) {
+                    newHashmap.range = JSON.parse(newHashmap.range);
+                }
+                
+                if (newHashmap.scheduler) {
+                    debugger;
+                    newHashmap.scheduler = JSON.parse(newHashmap.scheduler);
+                    if (typeof newHashmap.scheduler != 'object') {
+                        document.getElementById("alert_error").classList.add("show");
+                        document.getElementById("error_msg_alert").innerHTML = 'Scheduler Data is invalid. Please try again';
+                        document.getElementById('csv').value = "";
+                        setTimeout(() => {
+                            hidealert();
+                        }, 1500)
+                        return false;
+                    }
+
+                }
+               
+                if (newHashmap.default_setpoint) {
+                    newHashmap.setpoint = {
+                        "default": newHashmap.default_setpoint,
+                        "low": newHashmap.setpoint_low,
+                        "high": newHashmap.setpoint_high
+
+                    }
+                }
+
+                if (newHashmap.measuring_unit == 0 || newHashmap.measuring_unit != '') {
+
+                    newHashmap.sensor_unit = {
+                        "en": newHashmap.measuring_unit_enable,
+                        "unit": newHashmap.measuring_unit,
+                        "min": newHashmap.measuring_unit_min,
+                        "max": newHashmap.measuring_unit_max
+
+                    }
+                }
+                if (newHashmap.ifc) {
+                    if (newHashmap.ifc != 'eth' && newHashmap.ifc != 'wifi') {
+                        document.getElementById("alert_error").classList.add("show");
+                        document.getElementById("error_msg_alert").innerHTML = 'Invalid Connection type. Please try again';
+                        document.getElementById('csv').value = "";
+                        setTimeout(() => {
+                            hidealert();
+                        }, 1500)
+                        return false;
+                    }
+                    if (newHashmap.ifc == 'eth' && newHashmap.iptype != 'dynamic' && newHashmap.iptype != 'static') {
+                        document.getElementById("alert_error").classList.add("show");
+                        document.getElementById("error_msg_alert").innerHTML = 'Invalid IP type. Please try again';
+                        document.getElementById('csv').value = "";
+                        setTimeout(() => {
+                            hidealert();
+                        }, 1500)
+                        return false;
+                    }
+                    newHashmap.ethConfig = {
+                        "ifc": newHashmap.ifc,
+                        "iptype": (newHashmap.iptype == 'dynamic') ? 'd' : 's',
+                        "ip": newHashmap.ip || "0.0.0.0",
+                        "MASK": newHashmap.mask || "0.0.0.0",
+                        "GW": newHashmap.gateway || "0.0.0.0",
+                        "DNS": newHashmap.dns || "0.0.0.0"
+                    }
+                }
+                if (newHashmap.ssid) {
+                    newHashmap.wifiConfig = {
+                        "ssid": newHashmap.ssid,
+                        "pwd": newHashmap.password
+                    }
+
+                }
+                newHashmap.sensoradj = newHashmap.sensoradj;
+                if (newHashmap.device) {
+                    newHashmap.device = JSON.parse(newHashmap.device);
+                }
+
+                document.getElementById('csv').value = "";
+               
+                
+                lastCheckboxId = formName['opmode'].value;
+                newCheckboxId = newHashmap.opmode;
+                if( checkOperatingMode(event,formName['opmode'].value)) prefilldata(newHashmap);
+                document.getElementById("defaultOpen").click();
+                document.getElementById("alert_success").classList.add("show");
+                document.getElementById("success_msg_alert").innerHTML = langjson['configupdate'];
+
+                
+                document.getElementById('template_upload').style.display = 'none';
+            });
+        };
+        if (input == undefined) {
+            document.getElementById("alert_error").classList.add("show");
+            document.getElementById("error_msg_alert").innerHTML = 'Please upload the file';
+        } else {
+            document.getElementById("alert_error").classList.remove("show");
+            document.getElementById("error_msg_alert").innerHTML = '';
+        }
+        reader.readAsBinaryString(input);
+    }
+
+    function checkUser() {
+        // document.getElementById('link_upload').style.display = 'block';
+        // document.getElementById('link_download').style.display = 'block';
+        // // document.getElementById('link_upgrade').style.display = 'block';
+        // document.getElementById('link_upload_web').style.display = 'block';
+        // document.getElementById('link_download_web').style.display = 'block';
+        // document.getElementById('link_upgrade_web').style.display = 'block';
+        
+        if (userRole == 'installer') {
+            document.getElementById("user_info").innerText = langjson['service'];
+            document.getElementById("mobile_user_info").innerText = langjson['service'];
+            document.getElementById("pfactor").disabled = true;
+            document.getElementById("ifactor").disabled = true;
+            document.getElementById('resetfactor').style.color = '#62798b';
+            document.getElementById("reset").classList.add('disabled');
+            // document.getElementById("factor").disabled = true;
+        } else if (userRole == 'zehnder') {
+            document.getElementById("user_info").innerText = langjson['zehnder'];
+            document.getElementById("mobile_user_info").innerText = langjson['zehnder'];
+        } else {
+            userRole = 'enduser';
+            document.getElementById("user_info").innerText = langjson['enduser'];
+            document.getElementById("mobile_user_info").innerText = langjson['enduser'];
+            // document.getElementById('link_upload').style.display = 'none';
+            // document.getElementById('link_download').style.display = 'none';
+            // // document.getElementById('link_upgrade').style.display = 'none';
+            // document.getElementById('link_upload_web').style.display = 'none';
+            // document.getElementById('link_download_web').style.display = 'none';
+            // document.getElementById('link_upgrade_web').style.display = 'none';
+            document.getElementById('resetfactor').style.color = '#62798b';
+            document.getElementById("reset").classList.add('disabled');
+            var form = document.getElementById("config_form");
+            var elements = form.elements;
+            for (var i = 0, len = elements.length; i < len; ++i) {
+                if (elements[i]?.checked && elements[i].type != 'checkbox') {
+                    elements[i].disabled = false;
+                } else {
+                    elements[i].disabled = true;
+                    elements[i].parentNode.style.pointerEvents = 'none';
+                    elements[i].style.pointerEvents = 'none';
+                }
+
+            }
+        }
+    }
+    /*Disable the fields based on the user role*/
+    window.onload = function (e) {
+        debugger;
+        if(localStorage.getItem('Lang')!=undefined && localStorage.getItem('Lang')!='null'){
+            getLanguage(localStorage.getItem('Lang'))
+        }else{
+            getLanguage('i18n/en.json')
+        }
+        getLanguage(localStorage.getItem('Lang'))
+        if (document.getElementById("1").checked == true) {
+            document.getElementById("spunit").innerHTML = ' (Pa)';
+        } else if (document.getElementById("2").checked == true) {
+            document.getElementById("scheduled_mode").style.display = 'none';
+            document.getElementById("setpoin").style.display = 'none';
+            document.getElementById("tab5").style.display = 'none';
+            document.getElementById("temSetpoint").style.display = 'none';
+            document.getElementById("adv_senadj").style.display = 'none';
+            document.getElementById("ctrl_behavior").style.display = 'none';
+        } else if (document.getElementById("3").checked == true) {
+            document.getElementById("scheduled_mode").style.display = 'block';
+            if (formName['scheduled_mode'].value != 0) {
+                document.getElementById("tab5").style.display = 'block';
+            }
+            document.getElementById("setpoin").style.display = 'none';
+            //document.getElementById("tab5").style.display = 'none';
+            document.getElementById("temSetpoint").style.display = 'none';
+            document.getElementById("adv_senadj").style.display = 'none';
+            document.getElementById("ctrl_behavior").style.display = 'none';
+            document.getElementById("fixedfanspeed_div").style.display = 'none';
+            document.getElementById("multiple_setpoint").style.display = 'block';
+        } else if (document.getElementById("4").checked == true) {
+            document.getElementById("scheduled_mode").style.display = 'block';
+            document.getElementById("setpoin").style.display = 'block';
+            if (formName['scheduled_mode'].value != 0) {
+                document.getElementById("tab5").style.display = 'block';
+            }
+            document.getElementById("temSetpoint").style.display = 'none';
+            document.getElementById("adv_senadj").style.display = 'none';
+            document.getElementById("ctrl_behavior").style.display = 'none';
+            document.getElementById("fixedfanspeed_div").style.display = 'block';
+            document.getElementById("multiple_setpoint").style.display = 'none';
+            document.getElementById("setpoin").style.display = 'block';
+            document.getElementById("spunit").innerHTML = ' (%)';
+            if (document.querySelectorAll('.schedules-list').length == 0 && userRole != 'enduser') {
+                document.getElementById("add_segment").style.display = "block";
+            }
+
+        }
+    }
+
+    function jsonToCsv(json) {
+        // // First, we'll create an array of the keys from the JSON object.
+        // // This will be the first row of the CSV file, with the column names.
+        // const keys = Object.keys(json[0]);
+
+        // // Next, we'll create an array of the values from the JSON object.
+        // // This will be the remaining rows of the CSV file, with the data.
+        // const values = json.map(obj => keys.map(key => obj[key]));
+
+        // // Now, we'll combine the keys and values arrays into a single array of rows.
+        // const rows = [keys, ...values];
+
+        // // Finally, we'll join the rows into a single string, with each row
+        // // separated by a newline character, and each column separated by a
+        // // comma character.
+        // return rows.map(row => row.join(',')).join('\n');
+
+        const items = [json];
+        const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
+        const header = Object.keys(items[0])
+        let csv = items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+        csv.unshift(header.join(','))
+        csv = csv.join('\r\n')
+        let link = document.createElement('a')
+        link.id = 'download-csv'
+        link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csv));
+        link.setAttribute('download', 'yourfiletextgoeshere.xls');
+        document.body.appendChild(link)
+        document.querySelector('#download-csv').click()
+        // console.log(csv)
+    }
+    /*Ascii*/
+    function ascii(e) {
+        var str = e.value;
+        e.value = str.replace(/[^\x00-\x7F]/g, "");
+    }
+    /*Get SSID*/
+    var rangeValidation;
+    var deviceDetail;
+    var responseDupGateway;
+    function getSSID() {
+      
+        // gatewayResponse = {"opmode":3,"fixedspeedmax":100,"fixedspeedmin":0,"pfactor":0,"ifactor":1,"cfunc":1,"mtr_stop_en":0,"range":{"rng_min_setpoint_pres":0,"rng_max_setpoint_pres":500,"rng_fixedspeedmax":100,"rng_fixedspeedmin":0,"rng_min_pfactor":0,"rng_max_pfactor":100,"rng_min_ifactor":1,"rng_max_ifactor":10,"rng_min_sensor_adj":-100,"rng_max_sensor_adj":100},"sensoradj":{"preSensorAdj":0},"fans":{"fan1_addr":1,"fan1_sl":"00000","fan2_addr":0,"fan2_sl":"00000","fan3_addr":0,"fan3_sl":"00000","fan4_addr":0,"fan4_sl":"00000","fan5_addr":0,"fan5_sl":"00000","fan6_addr":0,"fan6_sl":"00000","fan7_addr":0,"fan7_sl":"00000","fan8_addr":0,"fan8_sl":"00000","fan9_addr":0,"fan9_sl":"00000","fan10_addr":0,"fan10_sl":"00000","fan11_addr":0,"fan11_sl":"00000","fan12_addr":0,"fan12_sl":"00000","fan13_addr":0,"fan13_sl":"00000","fan14_addr":0,"fan14_sl":"00000","fan15_addr":0,"fan15_sl":"00000","fan16_addr":0,"fan16_sl":"00000","fan17_addr":0,"fan17_sl":"00000","fan18_addr":0,"fan18_sl":"00000","fan19_addr":0,"fan19_sl":"00000","fan20_addr":0,"fan20_sl":"00000"},"scheduledmode":0,"scheduler":[],"en":1,"sensor_unit":{"unit":0,"min":0,"max":40},"setpoint":{"default":100,"low":0,"high":0},"device":{"did":"GKC-A848FA877A34","hw_ver":"1.0.0","fw_ver":"1.0.0.0"},"wifiConfig":{"ssid":"EBM_AP","pwd":"12345678"},"ethConfig":{"ifc":"eth","iptype":"d","ip":"0.0.0.0","MASK":"0.0.0.0","GW":"0.0.0.0","DNS":"0.0.0.0"},"lang":2}
+        // responseDupGateway = gatewayResponse;
+        // populateScheduler(gatewayResponse.scheduler);
+        // rangeValidation = gatewayResponse.range;
+        // deviceDetail = gatewayResponse.device;
+        // if (gatewayResponse.sensor_unit?.en == 1) {
+        //     formName["sensor_enabled"].checked = true;
+        // } else {
+        //     formName["sensor_enabled"].checked = false;
+        // }
+        // lastCheckboxId = gatewayResponse.opmode;
+        // enablefields();
+        
+        // var lang = 'i18n/de.json';
+        // if(gatewayResponse.lang==0){
+        //     lang = 'i18n/de.json'; 
+        // }else if(gatewayResponse.lang==1){
+        //     lang = 'i18n/ge.json'; 
+        // }else if(gatewayResponse.lang==2){
+        //     lang = 'i18n/en.json'; 
+        // }
+        // getLanguage(lang);
+        // prefilldata(gatewayResponse)
+        // if(gatewayResponse.userrole==0){
+        //     userRole = 'installer'
+        // }else if(gatewayResponse.userrole==0){
+        //     userRole = 'zehnder'
+        // }else{
+        //     userRole = 'enduser'
+        // }
+        //    if (gatewayResponse != "") {
+        //         /*Config*/
+        //         formName['opmode'].value = gatewayResponse.opmode;
+        //         formName['setpoint'].value = gatewayResponse.setpoint?.default;     
+        //         formName['multiplemin'].value = gatewayResponse.setpoint?.low;
+        //         formName['multiplemax'].value = gatewayResponse.setpoint?.high;
+        //         formName['fixedfspeedmax'].value = gatewayResponse.fixedspeedmax;
+        //         formName['fixedfspeedmin'].value = gatewayResponse.fixedspeedmin;
+        //         formName['pfactor'].value = gatewayResponse.pfactor;
+        //         formName['ifactor'].value = gatewayResponse.ifactor;
+        //         formName['ctrlbehavior'].value = gatewayResponse.cfunc;
+        //         formName["scheduled_mode"].value = gatewayResponse.scheduledmode;
+        //         formName["sensoradj"].value = gatewayResponse.sensoradj.preSensorAdj;
+        //         formName["sensor_unit"].value =  gatewayResponse.sensor_unit.unit;
+        //         formName["sensor_min"].value =  gatewayResponse.sensor_unit.min;
+        //         formName["sensor_max"].value =  gatewayResponse.sensor_unit.max;
+        //         rangeValidation = gatewayResponse.range;
+
+        //         selectOperatingMode(gatewayResponse.opmode);
+        //         selectScheduledMode(gatewayResponse.scheduledmode);
+        //         jsonData = gatewayResponse.scheduler;
+        //         // loadModalSchedule(jsonData);
+        //     }
+        //     document.getElementById("device_id").innerHTML= 'Device ID: '+gatewayResponse.device.did;
+        //     document.getElementById("version").innerHTML= 'Hardware: '+gatewayResponse.device.hw_ver+ ',  Firmware: '+gatewayResponse.device.fw_ver;
+
+
+        //     document.getElementById("page_loader").style.display = 'flex';
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var result = this.responseText;
+                var response = JSON.parse(result.replace(/[\n\r\t]/g, ""));
+                gatewayResponse = response.config;
+                document.getElementById("page_loader").style.display = 'none';
+                if (gatewayResponse != "") {
+                    responseDupGateway = gatewayResponse;
+                    rangeValidation = gatewayResponse.range;
+                    deviceDetail = gatewayResponse.device;
+                    var lang = 'i18n/de.json';
+                    if(gatewayResponse.lang==0){
+                        lang = 'i18n/de.json'; 
+                    }else if(gatewayResponse.lang==1){
+                        lang = 'i18n/ge.json'; 
+                    }else if(gatewayResponse.lang==2){
+                        lang = 'i18n/en.json'; 
+                    }
+                    getLanguage(lang);
+                    /*Config*/
+                    prefilldata(gatewayResponse);
+                    // if(gatewayResponse.userrole==0){
+                    //     userRole = 'installer'
+                    // }else if(gatewayResponse.userrole==1){
+                    //     userRole = 'zehnder'
+                    // }else{
+                    //     userRole = 'enduser'
+                    // }
+                   
+                    // loadModalSchedule(jsonData);
+                } else {
+                    document.getElementById("page_loader").style.display = 'none';
+                    // resetData();
+                }
+            } else {
+                document.getElementById("page_loader").style.display = 'none';
+            }
+        };
+        xhttp.open("POST", "/ssid_passphrase", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(null);
+        IPtype = 'd';
+    }
+
+    /*Download JSON*/
+    function downloadData() {
+        processData();
+        var response = finalObj.config;
+        //console.log(finalObj)
+        if (response == undefined) {
+            document.getElementById("alert_error").classList.add("show");
+            document.getElementById("error_msg_alert").innerHTML = 'No data to download';
+        }
+        // if(response.range){
+        //     response.range = JSON.stringify(response.range);
+        // }
+        if (response.scheduler) {
+            response.scheduler = JSON.stringify(response.scheduler);
+        }
+        if (response.sensor_unit) {
+            response.measuring_unit_enable = response.en;
+            response.measuring_unit = response.sensor_unit.unit;
+            response.measuring_unit_min = response.sensor_unit.min;
+            response.measuring_unit_max = response.sensor_unit.max;
+        }
+        if (response.setpoint) {
+            response.default_setpoint = response.setpoint.default;
+            response.setpoint_low = response.setpoint.low;
+            response.setpoint_high = response.setpoint.high;
+            // response.setpoint = JSON.stringify(response.setpoint);
+        }
+
+
+        if (response.ethConfig) {
+            response.ifc = response.ethConfig.ifc;
+            response.iptype = (response.ethConfig.iptype == 'd') ? 'dynamic' : 'static';
+            response.ip = response.ethConfig.ip || '0.0.0.0';
+            response.mask = response.ethConfig.MASK || '0.0.0.0';
+            response.gateway = response.ethConfig.GW || '0.0.0.0';
+            response.dns = response.ethConfig.DNS || '0.0.0.0';
+        }
+        if (response.wifiConfig) {
+            response.ssid = response.wifiConfig.ssid;
+            response.password = response.wifiConfig.pwd;
+        }
+        response.sensoradj = response.sensoradj;
+        if (response.device) {
+            delete response.device;
+        }
+        if (response.range) {
+            delete response.range;
+        }
+        delete response.setpoint;
+        delete response.ethConfig;
+        delete response.wifiConfig;
+        delete response.sensor_unit;
+        delete response.en;
+
+        if (response.fans) {
+            delete response.fans;
+        }
+        filename = 'zehnder_template.xlsx';
+        data = [response];
+        data = [];
+        for (const [key, value] of Object.entries(response)) {
+            let obj = {
+                "Settings": key,
+                "Value": value
+            }
+
+            data.push(obj);
+        }
+        data.splice(0, 0, { "Settings": '', "Value": '' })
+        var ws = XLSX.utils.json_to_sheet(data);
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Response");
+
+        XLSX.writeFile(wb, filename);
+
+    }
+
+    /*Prefill Response*/
+    function prefilldata(res) {
+        document.getElementById("config_form").reset();
+
+        deviceDetail = responseDupGateway?.device;
+        formName['opmode'].value = res?.opmode;
+        formName['setpoint'].value = res?.setpoint.default;
+        formName['multiplemin'].value = res?.setpoint.low;
+        formName['multiplemax'].value = res?.setpoint.high;
+        formName['fixedfspeedmax'].value = res?.fixedspeedmax;
+        formName['fixedfspeedmin'].value = res?.fixedspeedmin;
+        formName['pfactor'].value = res.pfactor;
+        formName['ifactor'].value = res?.ifactor;
+        formName['ctrlbehavior'].value = res?.cfunc;
+        formName["scheduled_mode"].value = res?.scheduledmode;
+        if (typeof res?.sensoradj == 'object') {
+            formName["sensoradj"].value = res?.sensoradj?.preSensorAdj;
+        } else {
+            formName["sensoradj"].value = res?.sensoradj;
+        }
+
+
+        formName["sensor_unit"].value = res?.sensor_unit?.unit;
+        formName["sensor_min"].value = res?.sensor_unit?.min;
+        formName["sensor_max"].value = res?.sensor_unit?.max;
+        formName["NetworkInterface"].value = res.ethConfig?.ifc;
+        formName["IP"].value = res.ethConfig?.iptype;
+        formName["ip_inp"].value = res.ethConfig?.ip || '0.0.0.0';
+        formName["mask"].value = res.ethConfig?.MASK || '0.0.0.0';
+        formName["gateway"].value = res.ethConfig?.GW || '0.0.0.0';
+        formName["dns"].value = res.ethConfig?.DNS || '0.0.0.0';
+        formName["ssid"].value = res.wifiConfig?.ssid;
+        formName["passphrase"].value = res.wifiConfig?.pwd;
+        // if (res?.mtr_stop_en == 1) {
+        //     formName["motor_enable"].checked = true;
+        // } else {
+        //     formName["motor_enable"].checked = false;
+        // }
+        formName['motor_enable'].value = res?.mtr_stop_en;
+
+        if ((res?.en == 1) || (res?.sensor_unit?.en == 1)) {
+            formName["sensor_enabled"].checked = true;
+        } else {
+            formName["sensor_enabled"].checked = false;
+        }
+
+        if (res?.hw_type == 1 || res?.hw_type == 3) {
+            document.getElementById('1').disabled = true;
+        }else {
+            document.getElementById('1').disabled = false;
+        }
+        enablefields();
+        gatewayResponse = res;
+        // rangeValidation = res.range;
+        enablefields(responseDupGateway?.sensor_unit.en);
+        populateScheduler(res.scheduler);
+        selectOperatingMode(res.opmode);
+
+        selectScheduledMode(res.scheduledmode);
+        statIpDisabled();
+        wifiDisable();
+        jsonData = res.scheduler;
+        document.getElementById("device_id").innerHTML = 'SSID: ' + deviceDetail?.did;
+        document.getElementById("version").innerHTML =  langjson['hardware']+ ' :' + deviceDetail?.hw_ver + ', '+langjson['firmware']+': ' + deviceDetail?.fw_ver;
+        setTimeout(() => {
+            validateForm()
+        }, 700)
+    }
+    var langjson = {};
+    /*Localizatiom*/
+    function getLanguage(lang) {
+        localStorage.setItem('Lang', lang);
+         document.getElementById('language').value = lang;
+        document.getElementById('language-popup').style.display = 'none';
+        //  document.getElementById('language_mobile').value = lang;
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType("application/json");
+        xobj.open('GET', lang, true);
+        xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+                langjson = JSON.parse(xobj.responseText);
+                document.getElementById("device_id").innerHTML = 'SSID: ' + deviceDetail?.did;
+
+                document.getElementById("version").innerHTML =  langjson['hardware']+ ' :' + deviceDetail?.hw_ver + ', '+langjson['firmware']+': ' + deviceDetail?.fw_ver;
+                Object.entries(langjson).forEach(([key, val]) => {
+                    if (document.querySelectorAll('[data-translate="' + key + '"]').length > 0) {
+                        for (var i = 0; i < document.querySelectorAll('[data-translate="' + key + '"]').length; i++) {
+                            document.querySelectorAll('[data-translate="' + key + '"]')[i].innerHTML = val;
+                            if (document.querySelectorAll('[data-translate="' + key + '"]')[i].placeholder != undefined) {
+                                document.querySelectorAll('[data-translate="' + key + '"]')[i].placeholder = val;
+                            }
+                            document.querySelectorAll('[data-translate="' + key + '"]')[i].setAttribute("data-attr", val);
+                        }
+                    }
+                });
+                checkUser()
+            }
+        };
+        xobj.send(null);
+    }
+
+    var selectedLang;
+    var selectedId;
+    function getLanguageVal(lang) {
+        selectedLang = lang;
+    }
+
+    function updateLanguage() {
+        getLanguage(selectedLang);
+    }
+
+    function selectedLanguage() {
+        // var str = selectedLang || localStorage.getItem('Lang');
+        selectedId = (selectedLang || localStorage.getItem('Lang')).slice(5, 7);
+        if (selectedId) {
+            document.getElementById(selectedId).checked = true;
+        } else {
+
+        }
+       
+    }
+
+
+    function enablefields() {
+        if (formName['sensor_enabled'].checked == true) {
+            document.getElementById('sensor_unit_field').classList.remove('disabled');
+            document.getElementById('sensor_minmax_field').classList.remove('disabled');
+        } else {
+            document.getElementById('sensor_unit_field').classList.add('disabled');
+            document.getElementById('sensor_minmax_field').classList.add('disabled');
+            document.getElementById('sensor_min_error').innerHTML = ''
+            document.getElementById('sensor_max_error').innerHTML = ''
+        }
+    }
+
+    var jsonData = [];
+    // initial set up
+    document.getElementById("defaultOpen").click();
+    var formName = document.forms["config_form"];
+    var rangeformName = document.forms["rangeForm"];
+    var gatewayResponse;
+
+    // openmenu function
+    function openMenu(menu) {
+        document.getElementById(menu).classList.toggle("show");
+    }
+
+    function validateForm() {
+        var form = document.getElementById("config_form");
+        var elements = form.elements;
+        for (var i = 0, len = elements.length; i < len; ++i) {
+            if (userRole == 'enduser') {
+                if (elements[i]?.checked) {
+                    elements[i].disabled = false;
+                } else {
+                    elements[i].disabled = true;
+                    elements[i].style.pointerEvents = 'none';
+                }
+            }
+            if (elements[i].offsetWidth > 0 && elements[i].offsetHeight > 0 && elements[i].style.display != "none") {
+                validate(elements[i]);
+            }
+
+
+            // validate(elements[i]);
+        }
+    }
+    getSSID();
+    var livedatainterval;
+    // function to open the respective clicked tab
+    function openPage(evt, tabName) {
+        var i, tabContent, tabLinks;
+        tabContent = document.getElementsByClassName("tabcontent");
+
+        for (i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+        }
+        tabLinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tabLinks.length; i++) {
+            tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+        }
+        clearInterval(livedatainterval)
+        document.getElementById("action_area").style.visibility = 'visible';
+        if (tabName == 'live_data') {
+            document.getElementById("live_data_loader").style.display = 'flex';
+            document.getElementById("action_area").style.visibility = 'hidden';
+            document.getElementById("live_data").style.overflow = 'hidden';
+            liveData();
+            livedatainterval = setInterval(() => {
+                liveData()
+            }, 5000);
+            let unit = '(v)';
+            debugger;
+            if(formName['sensor_enabled'].checked){
+                if(formName['sensor_unit'].value==0){
+                    unit = '(&#x2103;)'
+                }else if (formName['sensor_unit'].value==1){
+                    unit = '(Pa)'
+                }else if (formName['sensor_unit'].value==2){
+                    unit = '(Co2)'
+                }else if (formName['sensor_unit'].value==3){
+                    unit = '(ppm)'
+                }
+            }
+           
+            document.getElementById("current_unit").innerHTML= unit;
+            debugger;
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+
+
+        setTimeout(() => {
+            validateForm()
+        }, 700)
+    }
+
+    var IF = 'eth';
+    var IPtype = 's';
+    var IPAddr = '0.0.0.0';
+    var NWMASK = '0.0.0.0';
+    var GWAddr = '0.0.0.0';
+    var DNSAddr = '0.0.0.0';
+
+    /*Checking Connection Type*/
+    function wifiDisable() {
+
+        if (document.getElementById("ethernet").checked) {
+            document.getElementById("wifi_settings").style.display = "none";
+            document.getElementById("dynamicIP").style.visibility = "visible";
+            document.getElementById("ip_fields").style.display = "block";
+            document.getElementById("ldhcp").style.visibility = "visible";
+            IF = 'eth';
+            statIpDisabled();
+        } else if(document.getElementById("wifi").checked){
+            document.getElementById("wifi_settings").style.display = "block";
+            document.getElementById("dynamicIP").style.visibility = "hidden";
+            document.getElementById("ip_fields").style.display = "none";
+            document.getElementById("ldhcp").style.visibility = "hidden";
+            document.getElementById("div_ip").style.display = 'none';
+            IF = 'wifi';
+        }
+    }
+
+    function visibilityIp() {
+        if (document.getElementById("static").checked) {
+            document.getElementById("div_ip").style.display = 'none';
+        } else {
+            document.getElementById("div_ip").style.display = 'block';
+        }
+    }
+
+    function statIpDisabled() {
+
+        if (document.getElementById("dynamicIP").checked) {
+            document.getElementById("ip_inp").style.visibility = "hidden";
+            document.getElementById("mask").style.visibility = "hidden";
+            document.getElementById("gateway").style.visibility = "hidden";
+            document.getElementById("dns").style.visibility = "hidden";
+            document.getElementById("div_ip").style.display = "none";
+            IPtype = 'd';
+        } else {
+            document.getElementById("ip_inp").style.visibility = "visible";
+            document.getElementById("mask").style.visibility = "visible";
+            document.getElementById("gateway").style.visibility = "visible";
+            document.getElementById("dns").style.visibility = "visible";
+            document.getElementById("div_ip").style.display = "block";
+            IPtype = 's';
+        }
+        //
+    }
+
+    function getTime() {
+         // let seconds =1677072334;
+        //         const ms = seconds * 1000;
+        //         document.getElementById("time").innerHTML = new Date(ms).toLocaleString("es-CL", {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit',hour12: false});
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var result = this.responseText;
+                let seconds =JSON.parse(result).date_time.ts;
+                const ms = seconds * 1000;
+                document.getElementById("time").innerHTML = new Date(ms).toLocaleString("es-CL", {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit',hour12: false});
+            }
+        };
+        xhttp.onloadend = function() {
+            if(xhr.status == 404) 
+                throw new Error(url + ' replied 404');
+        }
+        xhttp.onerror = function () {
+            document.getElementById("live_data").style.overflow = 'auto';
+            document.getElementById("live_data_loader").style.display = 'none';
+        };
+        xhttp.open("POST", "/date_time", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(null);
+    }
+
+    /*Populate Live Data*/
+    function liveData() {
+        //     livedata = {
+        //     "live_data":
+        //         {
+        //         "act_speed":438,
+        //         "act_pwm":15711,
+        //         "act_sens_val":9,
+        //         "err": '0x13',
+        //         "warning":'ERROR',
+        //         "frst_lst_err":'0x0024',
+        //         "sec_lst_err":'0x11',
+        //         "third_lst_error":'0x45',
+        //         "op_hrs":45,
+        //         "prod_code_fan":"0917",
+        //         "s_no":"12GY",
+        //         "i/p_vol":0,
+        //         "prod_data":"835000032",
+        //         "SN":"221236-0112-002",
+        //         "ts":1670221995
+        //         }
+        //     }
+
+        //     formName['actual_speed'].value = livedata.live_data.act_speed;
+        //     formName['actual_sensor_value'].value = livedata.live_data.act_sens_val;
+        //     findwarning(livedata.live_data.warning, 'warning_error');
+        //     findval(livedata.live_data.frst_lst_err, 'first_error');
+        //     findval(livedata.live_data.sec_lst_err, 'second_error');
+        //     findval(livedata.live_data.third_lst_error, 'third_error');
+        //     finderror(livedata.live_data.err, 'error');
+        //     formName['operational_hours'].value = livedata.live_data.op_hrs;
+        //     formName['production_code_fan'].value = livedata.live_data.prod_code_fan;
+        //     formName['serial_number_controller'].value = livedata.live_data.s_no;
+        //     formName['input_voltage'].value = livedata.live_data['i/p_vol'];
+        //     formName['actual_pwm'].value = livedata.live_data.act_pwm;
+        //     formName['prod_data'].value = livedata.live_data.prod_data;
+        //     formName['sn_intelligate'].value = livedata.live_data['SN'];
+        //   let seconds = /\d+/.exec(livedata.live_data.ts)[0];
+        //   const ms = seconds * 1000;
+        //   document.getElementById("date_time").innerHTML = new Date(ms).toLocaleString();
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var result = this.responseText;
+                var response = JSON.parse(result.replace(/[\n\r\t]/g, ""));
+                livedata = response;
+                document.getElementById("live_data_loader").style.display = 'none';
+                document.getElementById("live_data").style.overflow = 'auto';
+                formName['actual_speed'].value = livedata.live_data.act_speed;
+                formName['actual_sensor_value'].value = livedata.live_data.act_sens_val;
+                findwarning(livedata.live_data.warning, 'warning_error');
+                findval(livedata.live_data.frst_lst_err, 'first_error');
+                findval(livedata.live_data.sec_lst_err, 'second_error');
+                findval(livedata.live_data.third_lst_error, 'third_error');
+                finderror(livedata.live_data.err, 'error');
+                formName['operational_hours'].value = livedata.live_data.op_hrs;
+                formName['production_code_fan'].value = livedata.live_data.prod_code_fan;
+                formName['serial_number_controller'].value = livedata.live_data.s_no;
+                formName['input_voltage'].value = livedata.live_data['i/p_vol'];
+                formName['actual_pwm'].value = livedata.live_data.act_pwm;
+                formName['prod_data'].value = livedata.live_data.prod_data;
+                formName['sn_intelligate'].value = livedata.live_data['SN'];
+                let seconds = /\d+/.exec(livedata.live_data.ts)[0];
+                const ms = seconds * 1000;
+                document.getElementById("date_time").innerHTML = new Date(ms).toLocaleString();
+            } else {
+                document.getElementById("live_data").style.overflow = 'auto';
+                document.getElementById("live_data_loader").style.display = 'none';
+            }
+        };
+        xhttp.onloadend = function () {
+            if (xhr.status == 404)
+                throw new Error(url + ' replied 404');
+        }
+        xhttp.onerror = function () {
+            document.getElementById("live_data").style.overflow = 'auto';
+            document.getElementById("live_data_loader").style.display = 'none';
+        };
+        xhttp.open("POST", "/live_data", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(null);
+    }
+
+    /*Find Bitset for first/second/last*/
+    function findval(d, id) {
+        if (d == 'ERROR') {
+            document.getElementById(id + '_title').innerHTML = d;
+            document.getElementById(id + '_title').style.color = "#62798b";
+        } else {
+            document.getElementById(id + '_title').style.color = "#198754";
+            document.getElementById(id + '_title').innerHTML = 'No Error';
+        }
+
+        document.getElementById(id).innerHTML = '';
+        var data = d;
+        var x = '0x001';
+        var bitset = '0x001';
+        for (i = 1; i <= 9; i++) {
+            if (data & bitset) {
+                document.getElementById(id + '_title').innerHTML = langjson['error_heading'];
+                // console.log(i);
+                if (i == 1 || i == 2 || i == 4) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["noerror"]+'</li>';
+                } else if (i == 3) {
+                    document.getElementById(id).innerHTML +=  '<li>'+langjson["overheating"]+'</li>';
+                } else if (i == 5) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["comm_error"]+'</li>';
+                } else if (i == 6) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["motor_heating"]+'</li>';
+                } else if (i == 7) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["hall_error"]+'</li>';
+                } else if (i == 8) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["motor_blocked"]+'</li>';
+                } else if (i == 9) {
+                    document.getElementById(id).innerHTML +='<li>'+langjson["speedlimit"]+'</li>';
+                } else {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["unknownerror"]+'</li>'
+                }
+            }
+            bitset = x << i;
+        }
+    }
+
+    /*Find Bitset for Warning*/
+    function findwarning(d, id) {
+        if (d == 'ERROR') {
+            document.getElementById(id + '_title').innerHTML = d;
+            document.getElementById(id + '_title').style.color = "#62798b";
+        } else {
+            document.getElementById(id + '_title').style.color = "#198754";
+            document.getElementById(id + '_title').innerHTML = 'No Error';
+        }
+        document.getElementById(id).innerHTML = '';
+        var data = d;
+        var x = '0x001';
+        var bitset = '0x001';
+        for (i = 1; i <= 16; i++) {
+            if (data & bitset) {
+                document.getElementById(id + '_title').innerHTML = langjson['warning'];
+                if (i == 1) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["current_triggered"]+'</li>';
+                } else if (i == 2) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["line_impedance"]+'</li>';
+                } else if (i == 3) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["power_triggered"]+'</li>';
+                } else if (i == 4) {
+                    document.getElementById(id).innerHTML +=  '<li>'+langjson["output_stage"]+'</li>';
+                } else if (i == 5) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["motor_high"]+'</li>';
+                } else if (i == 6) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["temperature_high"]+'</li>';
+                } else if (i == 7) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["dcvoltage_low"]+'</li>';
+                } else if (i == 8) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["motorbrake"]+'</li>';
+                } else if (i == 9) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["calibration"]+'</li>';
+                } else if (i == 10) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["currentspeed"]+'</li>';
+                } else if (i == 12 || i == 14) {
+                    document.getElementById(id).innerHTML += "<li>No warning</li>";
+                } else if (i == 11) {
+                    document.getElementById(id).innerHTML += "<li>Cable break at analog input or PWM input for the analogue set valueinput </li>";
+                } else if (i == 13) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["dc_undervoltage"]+'</li>';
+                } else if (i == 15) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["lineundervolt"]+'</li>';
+                } else if (i == 16) {
+                    document.getElementById(id).innerHTML += "<li>Shedding function active</li>";
+                } else {
+                    document.getElementById(id).innerHTML += "<li>unknown warning</li>";
+                }
+            }
+            bitset = x << i;
+        }
+    }
+
+    /*Find Bitset for Warning*/
+    function finderror(d, id) {
+        if (d == 'ERROR') {
+            document.getElementById(id + '_title').innerHTML = d;
+            document.getElementById(id + '_title').style.color = "#62798b";
+        } else {
+            document.getElementById(id + '_title').style.color = "#198754";
+            document.getElementById(id + '_title').innerHTML = langjson["noerror"];
+        }
+        document.getElementById(id).innerHTML = '';
+        var data = d;
+        var x = '0x001';
+        var bitset = '0x001';
+        for (i = 1; i <= 13; i++) {
+            if (data & bitset) {
+                document.getElementById(id + '_title').innerHTML = langjson['error_heading'];
+                // console.log(i)
+                if (i == 1) {
+                    document.getElementById(id).innerHTML += "<li>Phase failure (3-phase devices) or line undervoltage (single-phase devices)</li>";
+                } else if (i == 2 || i == 10 || i == 12) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["noerror"]+'</li>';
+                } else if (i == 3) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["overheating"]+'</li>';
+                } else if (i == 4) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["commerror"]+'</li>';
+                } else if (i == 5) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["Fan Bad"]+'</li>';
+                } else if (i == 6) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["motor_heating"]+'</li>';
+                } else if (i == 7) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["hall_error"]+'</li>';
+                } else if (i == 8) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["motor_blocked"]+'</li>';
+                } else if (i == 9) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["speedlimit"]+'</li>';
+                } else if (i == 11) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["rotorposition"]+'</li>';
+                } else if (i == 13) {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["dc_undervoltage"]+'</li>';
+                } else {
+                    document.getElementById(id).innerHTML += '<li>'+langjson["unknownerror"]+'</li>';
+                }
+            }
+            bitset = x << i;
+        }
+    }
+
+    // check Alphanumeric validation
+    function allowAlphaNumericSpace(e) {
+        var str = e.value;
+        var match = str?.match(/[^A-Za-z0-9!@#$%&*()_+\-=?;:.<>\{\}\[\]\\\/]/g)
+        if (match != null) {
+            match.forEach(function (v, k) {
+                str = str.replace(v, '');
+            })
+        }
+        e.value = str;
+    }
+
+    // Check Numeric validation
+    function isNumber(e) {
+        var str = e.value;
+        var match = str?.match(/[^0-9]-/g)
+        if (match != null) {
+            match.forEach(function (v, k) {
+                str = str.replace(v, '');
+            })
+        }
+        e.value = str;
+    }
+
+    // function to check whether the input is decimal or not
+    function checkDecimal(e) {
+        if (e.value == Math.floor(e.value)) {
+            document.getElementById(e.name + '_error').innerHTML = '';
+            formName[e.name]?.parentElement?.classList?.remove('error-field');
+            return true;
+        } else {
+            formName[e.name].parentElement.classList.add('error-field');
+            document.getElementById(e.name + '_error').innerHTML = langjson['shouldnotdecimal'];
+            return false;
+        }
+    }
+
+    // navigate to the error tab using this function
+    function checkErrorText() {
+        for (var i = 0; i < formName.elements.length; i++) {
+            if (document.getElementById(formName[i]?.name + '_error') && document.getElementById(formName[i]?.name + '_error')?.innerHTML != '') {
+                if (document.getElementById(formName[i]?.name + '_error').offsetWidth > 0 && document.getElementById(formName[i]?.name + '_error').offsetHeight > 0 && document.getElementById(formName[i]?.name + '_error').style.display != "none") {
+                    var className = document.getElementById(formName[i]?.name)?.closest('.tabcontent').classList[1];
+                    className = (className == 'tab1' || className == undefined) ? 'defaultOpen' : className;
+                    document.getElementById(className).click();
+                    // console.log(formName[i]?.name)
+                    document.querySelector('#' + formName[i]?.name).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    return false;
+                }
+
+
+            }
+        }
+    }
+    
+   
+    function checkOperatingMode(event, id){
+        debugger;
+        if(id!=2 && formName['scheduled_mode'].value==1){  
+            if(jsonData.length > 0 && lastCheckboxId!=2){
+              if(event)  event.preventDefault(); 
+              document.getElementById('delete_msg').style.display = 'flex';
+              return false;
+            }else{
+                if(event)event.stopPropagation();
+                selectOperatingMode(newCheckboxId);
+                return true;
+            }
+        }else{
+            selectOperatingMode(newCheckboxId);
+            return true;
+        }
+    }
+    // function to select the operating mode
+    function selectOperatingMode(id) {
+        setTimeout(()=>{
+            if (id == gatewayResponse?.opmode) {
+                document.getElementById("setpoint").value = gatewayResponse.setpoint.default;
+                jsonData = gatewayResponse.scheduler;
+                dupJsonData = gatewayResponse.scheduler;
+                populateScheduler(jsonData);
+            }
+        }, 500)
+        document.getElementById("fixedfanspeed_div").style.display = 'block';
+        document.getElementById("multiple_setpoint").style.display = 'none';
+        document.getElementById("motor_enable").style.display = 'none';
+        if (id == 2 || id == 3 || id == 4) {
+            document.getElementById("scheduled_mode").style.display = 'none';
+            document.getElementById("setpoin").style.display = 'none';
+            document.getElementById("tab5").style.display = 'none';
+            document.getElementById("temSetpoint").style.display = 'none';
+            document.getElementById("adv_senadj").style.display = 'none';
+            document.getElementById("ctrl_behavior").style.display = 'none';
+        } else {
+            document.getElementById("scheduled_mode").style.display = 'block';
+            document.getElementById("setpoin").style.display = 'block';
+            document.getElementById("spunit").innerHTML = ' (Pa)';
+            if (id==1 && formName['scheduled_mode'].value===1) {
+                document.getElementById("tab5").style.display = 'block';
+            }
+
+            document.getElementById("temSetpoint").style.display = 'block';
+            document.getElementById("adv_senadj").style.display = 'block';
+            document.getElementById("ctrl_behavior").style.display = 'block';
+            checkValid(formName['setpoint'])
+        }
+
+        if (id == 2 || id == 3) {
+            document.getElementById("motor_enable").style.display = 'block';
+        }
+        if (id == 4) {
+            if (document.querySelectorAll('.schedules-list').length == 0 && userRole != 'enduser') {
+                document.getElementById("add_segment").style.display = "block";
+            }
+            document.getElementById("setpoin").style.display = 'block';
+            document.getElementById("scheduled_mode").style.display = 'block';
+            if (formName['scheduled_mode'].value != 0) {
+                document.getElementById("tab5").style.display = 'block';
+            }
+            document.getElementById("spunit").innerHTML = ' (%)';
+            checkValid(formName['setpoint'])
+        }
+        if (id == 3) {
+            document.getElementById("multiple_setpoint").style.display = 'block';
+            document.getElementById("fixedfanspeed_div").style.display = 'none';
+            document.getElementById("scheduled_mode").style.display = 'block';
+            document.getElementById("spunit").innerHTML = ' (Pa)';
+            if (formName['scheduled_mode'].value != 0) {
+                document.getElementById("tab5").style.display = 'block';
+            }
+        }
+    }
+
+    // function to select the schedule mode
+    function selectScheduledMode(id) {
+        if (userRole == 'enduser') {
+            return false;
+        }
+        if (id == 0) {
+            document.getElementById("tab5").style.display = 'none';
+        } else {
+            if (formName['opmode'].value == '1' || formName['opmode'].value == '4' || formName['opmode'].value == '3') {
+                document.getElementById("tab5").style.display = 'block';
+            }
+
+        }
+    }
+
+    function checkScheduler(){
+
+    }
+
+    function validatesetpoint(val, id) {
+        if (formName['opmode'].value == '1') {
+            if (val >= rangeValidation?.rng_min_setpoint_pres && val <= rangeValidation?.rng_max_setpoint_pres) {
+                if (val == Math.floor(val)) {
+                    document.getElementById(id + '_error').innerHTML = '';
+                } else {
+                    document.getElementById(id + '_error').innerHTML = langjson['shouldnotdecimal'];
+                    return false;
+                }
+            } else {
+                document.getElementById(id + '_error').innerHTML = langjson['shouldbe'] + rangeValidation?.rng_min_setpoint_pres + ' and ' + rangeValidation?.rng_max_setpoint_pres + '&nbsp;' + langjson['allowed'];
+                return false;
+            }
+        } else if (formName['opmode'].value == '4') {
+            if (val >= 10 && val <= 100) {
+                document.getElementById(id + '_error').innerHTML = '';
+            } else {
+                document.getElementById(id + '_error').innerHTML = langjson['shouldbe'] + ' 10 and 100 ' + langjson['allowed'];
+                return false;
+            }
+
+        } else {
+            if (val >= 0 && val <= 100) {
+                document.getElementById(id + '_error').innerHTML = '';
+            } else {
+                document.getElementById(id + '_error').innerHTML = langjson['shouldbe'] + ' 0 and 100 ' + langjson['allowed'];
+                return false;
+            }
+
+        }
+    }
+
+    // function to check if the value is valid or not
+    function checkValid(e) {
+        if (formName['opmode'].value == '1') {
+            if (e.value >= rangeValidation?.rng_min_setpoint_pres && e.value <= rangeValidation?.rng_max_setpoint_pres) {
+                if (e.value == Math.floor(e.value)) {
+                    document.getElementById(e.name + '_error').innerHTML = '';
+                    formName[e.name]?.classList.remove('error-field');
+                    allowAlphaNumericSpace(e);
+                } else {
+                    formName[e.name]?.classList.add('error-field');
+                    document.getElementById(e.name + '_error').innerHTML = langjson['shouldnotdecimal'];
+                    document.getElementById("setpoint").value = '';
+                    return false;
+                }
+            } else {
+                formName[e.name]?.classList.add('error-field');
+                document.getElementById(e.name + '_error').innerHTML = langjson['shouldbe'] + rangeValidation?.rng_min_setpoint_pres + ' and ' + rangeValidation?.rng_max_setpoint_pres + ' ' + langjson['allowed'];
+                return false;
+            }
+        } else if (formName['opmode'].value == '4' || formName['opmode'].value == '3') {
+            if (e.value >= 10 && e.value <= 100) {
+                document.getElementById(e.name + '_error').innerHTML = '';
+                formName[e.name]?.classList.remove('error-field');
+                allowAlphaNumericSpace(e);
+            } else {
+                formName[e.name]?.classList.add('error-field');
+                document.getElementById(e.name + '_error').innerHTML = langjson['shouldbe'] + ' 10 and 100 ' + langjson['allowed'];
+                return false;
+            }
+
+        } else {
+            if (e.value >= 0 && e.value <= 100) {
+                document.getElementById(e.name + '_error').innerHTML = '';
+                formName[e.name]?.classList.remove('error-field');
+                allowAlphaNumericSpace(e);
+            } else {
+                formName[e.name]?.classList.add('error-field');
+                document.getElementById(e.name + '_error').innerHTML = langjson['shouldbe'] + ' 0 and 100 ' + + langjson['allowed'];
+                return false;
+            }
+
+        }
+    }
+
+    //Reset P-I Factor//
+    function resetpifactor(){
+        formName['pfactor'].value = 10;
+        formName['ifactor'].value = 2;
+    }
+    // function to validate the form-field 
+    function validate(e) {
+        if (e.name == 'setpoint') {
+            checkValid(e);
+        } else if (e.name == 'multiplemin' && checkDecimal(e)) {
+            document.getElementById(e.name + '_error').innerHTML = (e.value >= 0 && e.value <= 100) ? '' : 'Low ' + langjson['shouldbe'] + ' 0 and 100';
+            document.getElementById(e.name + '_error').innerHTML != '' ? formName[e.name].classList.add("error-field") : formName[e.name].classList.remove("error-field");
+            document.getElementById("multipleminmax_error").innerHTML = (parseInt(e.value) < parseInt(formName['multiplemax'].value)) ? '' : langjson['lowgreaterhigh'];
+            checkValid(e)
+        } else if (e.name == 'multiplemax' && checkDecimal(e)) {
+            document.getElementById(e.name + '_error').innerHTML = (e.value >= 0 && e.value <= 100) ? '' : 'High ' + langjson['shouldbe'] + ' 0 and 100 ' + langjson['allowed'];
+            document.getElementById(e.name + '_error').innerHTML != '' ? formName[e.name].classList.addn("error-field") : formName[e.name].classList.remove("error-field");
+            document.getElementById("multipleminmax_error").innerHTML = (parseInt(e.value) > parseInt(formName['multiplemin'].value)) ? '' : langjson['highgreaterlow'];
+            checkValid(e)
+        } else if (e.name == 'fixedfspeedmin' && checkDecimal(e)) {
+            document.getElementById(e.name + '_error').innerHTML = (e.value >= rangeValidation.rng_fixedspeedmin && e.value <= rangeValidation.rng_fixedspeedmax) ? '' : 'Min ' + langjson['shouldbe'] + rangeValidation.rng_fixedspeedmin + ' and ' + rangeValidation.rng_fixedspeedmax + ' ' + langjson['allowed'];
+            document.getElementById(e.name + '_error').innerHTML != '' ? formName[e.name].classList.add("error-field") : formName[e.name].classList.remove("error-field");
+            document.getElementById("fixedfspeedminmax_error").innerHTML = (parseInt(e.value) < parseInt(formName['fixedfspeedmax'].value)) ? '' : langjson['mingreatermax'];
+        } else if (e.name == 'ip_inp' || e.name == 'mask' || e.name == 'gateway' || e.name == 'dns') {
+            ValidateIPaddress(e)
+        } else if (e.name == 'fixedfspeedmax' && checkDecimal(e)) {
+            document.getElementById(e.name + '_error').innerHTML = (e.value >= rangeValidation.rng_fixedspeedmin && e.value <= rangeValidation.rng_fixedspeedmax) ? '' : 'Max ' + langjson['shouldbe'] + + rangeValidation.rng_fixedspeedmin + ' and ' + rangeValidation.rng_fixedspeedmax + ' ' + langjson['allowed'];
+            document.getElementById(e.name + '_error').innerHTML != '' ? formName[e.name].classList.add("error-field") : formName[e.name].classList.remove("error-field");
+            document.getElementById("fixedfspeedminmax_error").innerHTML = (parseInt(e.value) > parseInt(formName['fixedfspeedmin'].value)) ? '' : langjson['maxgreatermin'];
+        } else if (e.name == 'pfactor' && checkDecimal(e)) {
+            document.getElementById(e.name + '_error').innerHTML = (e.value >= rangeValidation.rng_min_pfactor && e.value <= rangeValidation.rng_max_pfactor) ? '' : 'P-factor ' + langjson['shouldbe'] + + rangeValidation.rng_min_pfactor + ' and ' + rangeValidation.rng_max_pfactor + ' ' + langjson['allowed'];
+            document.getElementById(e.name + '_error').innerHTML != '' ? formName[e.name].classList.add("error-field") : formName[e.name].classList.remove("error-field");
+        } else if (e.name == 'ifactor' && checkDecimal(e)) {
+            document.getElementById(e.name + '_error').innerHTML = (e.value >= rangeValidation.rng_min_ifactor && e.value <= rangeValidation.rng_max_ifactor) ? '' : 'I-factor ' + langjson['shouldbe'] + + rangeValidation.rng_min_ifactor + ' and ' + rangeValidation.rng_max_ifactor + ' ' + langjson['allowed'];
+            document.getElementById(e.name + '_error').innerHTML != '' ? formName[e.name].classList.add("error-field") : formName[e.name].classList.remove("error-field");
+        } else if (e.name == 'sensoradj') {
+            let min = rangeValidation.rng_min_sensor_adj;
+            let max = rangeValidation.rng_max_sensor_adj;
+            if (checkDecimal(e)) {
+                document.getElementById(e.name + '_error').innerHTML = (e.value >= min && e.value <= max) ? '' : langjson['shouldbe'] + min + ' and ' + max + langjson['allowed'];
+                document.getElementById(e.name + '_error').innerHTML != '' ? formName[e.name].classList.add("error-field") : formName[e.name].classList.remove("error-field");
+            }
+        } else if (e.name == 'sensor_min' && formName["sensor_enabled"].checked) {
+            if (formName['sensor_min'].value == '') {
+                document.getElementById('sensor_min_error').innerHTML = langjson['fillmin']
+            } else {
+                document.getElementById('sensor_min_error').innerHTML = ''
+            }
+            let str = e.value;
+            let match = str?.match(/[^0-9]+/g)
+            if (match != null) {
+                match.forEach(function (v, k) {
+                    str = str.replace(v, '');
+                })
+            }
+            e.value = str;
+            document.getElementById("sensor_min_error").innerHTML = (parseInt(e.value) < parseInt(formName['sensor_max'].value)) ? '' : langjson['mingreatermax'];
+            document.getElementById("sensor_max_error").innerHTML = (parseInt(formName['sensor_max'].value) > parseInt(e.value)) ? '' : langjson['maxgreatermin'];
+        } else if (e.name == 'sensor_max' && formName["sensor_enabled"].checked) {
+            if (formName['sensor_max'].value == '') {
+                document.getElementById('sensor_max_error').innerHTML = langjson['fillmax']
+            } else {
+                document.getElementById('sensor_max_error').innerHTML = ''
+            }
+            let str = e.value;
+            let match = str?.match(/[^0-9]+/g)
+            if (match != null) {
+                match.forEach(function (v, k) {
+                    str = str.replace(v, '');
+                })
+            }
+            e.value = str;
+            document.getElementById("sensor_min_error").innerHTML = (parseInt(formName['sensor_min'].value) < parseInt(e.value)) ? '' : langjson['mingreatermax'];
+            document.getElementById("sensor_max_error").innerHTML = (parseInt(e.value) > parseInt(formName['sensor_min'].value)) ? '' : langjson['maxgreatermin'];
+        }
+    }
+
+
+    /* Time scheduler configuration*/
+    /*Modal Control*/
+    var modal = document.getElementById("timeschedule_modal");
+    var closeModal = document.querySelectorAll(".close")[0];
+    if (closeModal) {
+        closeModal.onclick = function () {
+            modal.style.display = "none";
+        }
+    }
+
+    /*Open Time scheduler popup*/
+    function openTimeScheduler() {
+        document.getElementById('timeschedule_modal').style.display = 'block';
+        var selectBoxes = document.querySelectorAll('.selected-schedule');
+        for (let i = 1; i <= selectBoxes.length; i++) {
+            var element = document.getElementById('schedule_' + i);
+            if (element) element.remove();
+        }
+        
+        // callTimePicker("08:00","08:30");
+        populateScheduler(jsonData);
+        var scheduleLength = document.querySelectorAll('.selected-schedule').length;
+        if (scheduleLength < 35) {
+            document.getElementById("add-segment").style.display = "block";
+        } else {
+            document.getElementById("add-segment").style.display = "none";
+        }
+      
+        
+    }
+
+
+    // function loadHours() {
+    //     for (let i = 1; i <= 5; i++) {
+    //         var rangeElement = document.getElementsByClassName('range' + i);
+    //         if (!(document.querySelectorAll("input.schedule" + i + ":checked").length > 0)) {
+    //             for (let z = 23; z >= 0; --z) {
+    //                 for (const e of rangeElement) {
+    //                     e.innerHTML += '<option value="' + (23 - z) + '">' + (23 - z) + ':00</option>';
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    // }
+
+    /*Enable /Disable the fields */
+    function setenable(id, e) {
+        if (id != undefined && id == 1 && document.querySelectorAll("input.schedule" + id + ":checked").length == 0 && e != undefined) {
+            document.getElementById(e?.id).checked = true;
+            return false;
+        }
+        if (id != undefined && document.querySelectorAll("input.schedule" + id + ":checked").length > 0) {
+            document.getElementById("setpoint" + id).disabled = false;
+            // document.getElementById('range' + id + '-min').disabled = false;
+            // document.getElementById('range' + id + '-max').disabled = false;
+            document.getElementById("timepicker_set" + id + "_min").disabled = false;
+            document.getElementById("timepicker_set" + id + "_max").disabled = false;
+        } else {
+            if (newsch == 0) {
+                deletesegment(id);
+                document.getElementById("alert_error").classList.add("show");
+                document.getElementById("error_msg_alert").innerHTML = langjson['Schedule'] + id + langjson['removed'];
+            }
+            newsch = 0;
+            if (id != undefined && document.querySelectorAll("input.schedule" + id + ":checked").length == 0) {
+                document.getElementById("setpoint" + id).disabled = true;
+                // document.getElementById('range' + id + '-min').disabled = true;
+                // document.getElementById('range' + id + '-max').disabled = true;
+                document.getElementById("timepicker_set" + id + "_min").disabled = true;
+                document.getElementById("timepicker_set" + id + "_max").disabled = true;
+                document.getElementById('setpoint' + id + '_error').innerHTML = '';
+            }
+        }
+        validateTimeSegment();
+    }
+
+
+    /*Close the modal*/
+    function closeSchedule() {
+        if (dupJsonData!=undefined && dupJsonData.length > 0) jsonData = dupJsonData;
+        if (jsonData != undefined && jsonData.length == 0) {
+            jsonData = [];
+            document.getElementById("add_segment").style.display = "block";
+            document.getElementById("noTimeschedule").style.display = "block";
+            document.getElementById("edit_segment").style.display = "none";
+            document.querySelectorAll('input[name=schedules]').forEach(el => el.checked = false);
+            for (var z = 1; z < 5; z++) {
+                if (document.querySelector('#setpoint' + z)) {
+                    document.querySelector('#setpoint' + z).value = "";
+                    // document.getElementById('range' + z + '-min').value = "0";
+                    // document.getElementById('range' + z + '-max').value = "0";
+                    document.getElementById('timepicker_set' + z + '_min').value = "00";
+                    document.getElementById('timepicker_set' + z + '_max').value = "00";
+                }
+            }
+
+        }
+        var selectBoxes = document.querySelectorAll('.selected-schedule');
+        for (let i = 1; i <= selectBoxes.length; i++) {
+            var element = document.getElementById('schedule_' + i);
+            if (element) element.remove();
+        }
+        var scheduleLength = document.querySelectorAll('.selected-schedule').length;
+        if (scheduleLength < 5) {
+            document.getElementById("add-segment").style.display = "block";
+        }
+        document.getElementById("loader").style.display = 'flex';
+        setTimeout(() => {
+            document.getElementById("loader").style.display = 'none';
+            document.getElementById("timeschedule_modal").style.display = 'none';
+            populateScheduler(jsonData);
+
+        }, 500)
+        return false;
+    }
+
+    var dupJsonData = jsonData;
+    /*Save Data from the modal*/
+    function saveData() {
+        const parent = document.getElementById('schedule-fields');
+        const childNodes = parent.childNodes;
+
+        
+
+        for (let i = 0; i < childNodes.length; i++) {
+        const childNode = childNodes[i];
+
+        if (childNode.nodeType === Node.ELEMENT_NODE) {
+            let id = (childNode.id.length == 10) ? childNode.id.slice(-1) : childNode.id.slice(-2);
+            if(document.getElementById('schedule_'+id).querySelectorAll("input[type='checkbox']:not(:checked)").length==7){
+               deletesegment(id)
+            }
+        }
+        }
+        var checkboxes = document.querySelectorAll('input[name=schedules]:checked');
+
+        jsonData = [];
+        if (checkboxes.length == 0) {
+            document.getElementById('noTimeschedule').style.display = 'block';
+            document.getElementById('add_segment').style.display = 'block';
+        } else {
+            document.getElementById('noTimeschedule').style.display = 'none';
+            document.getElementById('add_segment').style.display = 'none';
+        }
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkbox_id = checkboxes[i].id;
+            // let id = checkbox_id.substr(checkbox_id.length - 1);
+            let id = (checkbox_id.length == 4) ? checkbox_id.slice(-1) : checkbox_id.slice(-2);
+
+            ts1_min_mins = document.getElementById('timepicker_set' + id + '_min').value;
+            ts1_max_mins = document.getElementById('timepicker_set' + id + '_max').value;
+
+            // if (ts1_min_mins > ts1_max_mins) {
+            //     document.getElementById("timepicker_set" + id + "_max").value = '';
+            //     document.getElementById("error_range" + id).innerText = langjson['togreaterfrom'];
+            //     return false;
+            // } else {
+            //     document.getElementById("error_range" + id).innerText = '';
+            // }
+       
+            const json = {
+                "en": 1,
+                "start": ts1_min_mins,
+                "end": ts1_max_mins,
+                "setpoint": parseInt(document.getElementsByName("setpoint" + id)[0].value),
+                "name": checkbox_id,
+                "id": id
+            }
+
+            if (ts1_max_mins == 0) {
+                alert(langjson['togreaterfrom'] + '(' + langjson['Schedule'] + id + ")");
+                return false;
+            }
+            if (!checkRangeValidate(checkbox_id) && !(validatesetpoint(parseInt(document.getElementsByName("setpoint" + id)[0].value), "setpoint" + id))) {
+                jsonData.push(json);
+            } else {
+                return false
+            };
+
+            if (document.getElementsByName("setpoint" + id)[0].value == '') {
+                alert(langjson['entersetpoint'] + id);
+                return false;
+            }
+        }
+        document.getElementById("loader").style.display = 'flex';
+
+        setTimeout(() => {
+            document.getElementById("loader").style.display = 'none';
+            var sched = document.querySelectorAll('.selected-schedule');
+            for (var i = 1; i <= sched.length; i++) {
+
+                if (document.getElementById("setpoint" + i + '_error') && document.getElementById("setpoint" + i + '_error')?.innerHTML != '') {
+                    document.getElementById("setpoint" + i + '_error').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    return false;
+
+                } else if (i == sched.length) {
+                    document.getElementById("timeschedule_modal").style.display = 'none';
+                    dupJsonData = jsonData;
+                    populateScheduler(jsonData);
+                    loadModalSchedule(jsonData);
+                }
+            }
+
+            if (sched.length == 0) {
+                document.getElementById("timeschedule_modal").style.display = 'none';
+                dupJsonData = jsonData;
+                populateScheduler(jsonData);
+                loadModalSchedule(jsonData);
+                setTimeout(() => {
+                    room = 1;
+                    addTimeSegment();
+                }, 200)
+            }
+        }, 500)
+
+
+
+    }
+
+    /*Check ip range*/
+    function ValidateIPaddress(ip) {
+        const invalidIp = ip.value.split(".").map(d => Number(d) >= 0 && Number(d) <= 255).includes(false);
+        if (invalidIp) {
+            document.getElementById(ip.name + '_error').innerHTML = (ip.value >= 0 && ip.value <= 1) ? '' : "Invalid " + ((ip.name == 'ip_inp') ? 'IP' : ip.name) + "  address";
+            document.getElementById(ip.name + '_error').innerHTML != '' ? formName[ip.name].parentElement.classList.add("error-field") : formName[ip.name].parentElement.classList.remove("error-field");
+            return false;
+        } else {
+
+            formName[ip.name].parentElement.classList.remove("error-field");
+            document.getElementById(ip.name + '_error').innerHTML = '';
+            return true;
+        }
+    }
+
+    function formatTime(e) {
+        const [hours, minutes] = e.split(":");
+        const totalMinutes = (Number(hours) * 60) + Number(minutes);
+        return totalMinutes;
+    }
+
+    /*Check Range Validation*/
+    function checkRangeValidate(id) {
+        var dayName = id.slice(0, -1);
+        var newArray = [];
+        for (let i = 0; i < els.length; i++) {
+            if (els[i].id.includes(dayName)) {
+                (els[i].value.length == 4) ? newArray.push(els[i].value.slice(-1)) : newArray.push(els[i].value.slice(-2));
+            }
+        }
+
+        for (let x = 0; x < newArray.length; x++) {
+            for (let y = 1; y < newArray.length; y++) {
+                if (newArray[x] !== newArray[y]) {
+                    let mainBucket = [],
+                        subBucket = [];
+                    let scheduleMain = [];
+                    let scheduleSub = [];
+
+                    t1_min = formatTime(document.getElementById('timepicker_set' + newArray[x] + '_min').value);
+                    t1_max = formatTime(document.getElementById('timepicker_set' + newArray[x] + '_max').value);
+                    t2_min = formatTime(document.getElementById('timepicker_set' + newArray[y] + '_min').value);
+                    t2_max = formatTime(document.getElementById('timepicker_set' + newArray[y] + '_max').value);
+                    for (var id = t1_min; id <= t1_max; id++) {
+                        mainBucket.push(Number(id));
+                    }
+                    for (var id = t2_min; id <= t2_max; id++) {
+                        subBucket.push(Number(id));
+                    }
+                    for (var id = 0; id < document.querySelectorAll('.schedule' + newArray[x] + ':checked').length; id++) {
+                        scheduleMain.push(document.querySelectorAll('.schedule' + newArray[x] + ':checked')[id].id.slice(0, -1))
+                    }
+                    for (var id = 0; id < document.querySelectorAll('.schedule' + newArray[y] + ':checked').length; id++) {
+                        scheduleSub.push(document.querySelectorAll('.schedule' + newArray[y] + ':checked')[id].id.slice(0, -1))
+                    }
+                    arr2Set = new Set(subBucket);
+                    arrSet = new Set(scheduleSub)
+
+                    if (mainBucket.some(el => arr2Set.has(el))) {
+
+                        if (scheduleMain.some(el => arrSet.has(el))) {
+
+                            msg = langjson['Schedule'] + ' ' + newArray[x] + langjson['overlap'] + langjson['Schedule'] + ' ' + newArray[y];
+                            alert(msg);
+                            return true;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    // loadHours();
+    /*Load the selected time schedule*/
+    function populateScheduler(data) {
+
+        const hash = {};
+        
+        data.forEach(function (obj) {
+            //obj.name = obj.name.slice(0, -1)
+            //obj.name = ((obj.name.length == 4) ? obj.name.slice(0,-1) : obj.name.slice(0,-2));
+            obj.id = obj.id.toString();
+            obj.name = obj.name.slice(0,3);
+            if (!hash[obj.name])
+                hash[obj.name] = 1;
+            obj.name = `${obj.name}${hash[obj.name]++}`;
+        })
+
+        if (typeof data == 'string') {
+            var data = JSON.parse(data);
+        }
+
+        // var matcheddata = data.filter((a, i) => data.findIndex((s) => a.id.slice(-1) === s.id.slice(-1)) === i);
+        var matcheddata = data.filter((a, i) => data.findIndex((s) => ((a.id.length == 4) ? a.id.slice(-1) : a.id.slice(-2)) === ((s.id.length == 4) ? s.id.slice(-1) : s.id.slice(-2))) === i);
+
+        for (i = 1; i <= matcheddata.length; i++) {
+            if (document.getElementById('schedule_' + i)) document.getElementById('schedule_' + i).remove();
+            room = matcheddata.length;
+            loadTimeSegment(matcheddata, data, i);
+
+        }
+        if(matcheddata.length==0){
+            if (document.getElementById('schedule_1')) document.getElementById('schedule_1').remove();
+            loadTimeSegment([], data, 1);
+        }
+
+
+        var schedules = document.querySelectorAll('.selected-schedule');
+        var sch_parent = document.getElementById("timechart");
+        sch_parent.innerHTML = '';
+        for (i = 0; i < schedules.length; i++) {
+            var sch_data = data.filter(entry => entry.id.includes(i + 1));
+
+            if (sch_data.length > 0) {
+                debugger;
+                let start = sch_data[0].start.includes(':') ? sch_data[0].start : sch_data[0].start;
+                let end = sch_data[0].end.includes(':') ? sch_data[0].end : sch_data[0].end;
+                
+                sch_parent.innerHTML += '<div class="schedules-list"><div class="points-duration"><b>Step-'+ (i+1) +'</b><h2>' + sch_data[0]?.setpoint + '</h2><p><img src="img/clock.png" width="15">  ' + start + ' -  ' + end + '</p></div><div class="days"><span class="sun' + (i + 1) + '">S</span><span class="mon' + (i + 1) + '">M</span><span class="tue' + (i + 1) + '">T</span> <span class="wed' + (i + 1) + '">W</span><span class="thu' + (i + 1) + '">T</span><span class="fri' + (i + 1) + '">F</span><span class="sat' + (i + 1) + '">S</span></div></div>'
+                sch_data.forEach(e => {
+                    
+                    let day = e.name.slice(0,3);
+                    document.querySelectorAll(`.${day}${e.id}`).forEach(item => {
+                        item.classList.add('active');
+                    });
+
+                });
+
+                if (userRole == 'enduser') {
+                    document.getElementById("noTimeschedule").style.display = 'none';
+                    document.getElementById("add_segment").style.display = 'none';
+                    document.getElementById("edit_segment").style.display = 'none';
+                } else {
+                    document.getElementById('edit_segment').style.display = 'flex';
+
+                }
+            }
+
+        };
+    }
+
+    /*Min max validation*/
+    function minmaxvalidation(event) { 
+        id = event.name;
+        value = event.value;
+
+        if (document.getElementById("timepicker_set" + id + "_min").value >= value || document.getElementById("timepicker_set" + id + "_max").value < value) {
+            document.getElementById("timepicker_set" + id + "_max").value = '';
+            document.getElementById("error_range" + id).innerText = langjson['togreaterfrom'];
+        } else {
+            document.getElementById("error_range" + id).innerText = '';
+        }
+    }
+
+    // code by siva
+    // to validate the maximum 5 days in the timesegment configuration
+    var els = [];
+    const stepArray = Object.values(els);
+    function validateTimeSegment() {
+        els = document.getElementsByName('schedules');
+        const stepArray = Object.values(els);
+        var choices = [];
+        var sunArray, monArray, tueArray, wedArray, thuArray, friArray, satArray = [];
+        var filteredArray = [];
+        var totArray = [];
+
+        for (let i = 0; i < els.length; i++) {
+            if (els[i].checked) {
+                choices.push(els[i].value);
+            }
+            document.getElementById(els[i].id).disabled = false;
+        }
+
+        sunArray = choices.filter(e => e.includes('sun'));
+        monArray = choices.filter(e => e.includes('mon'));
+        tueArray = choices.filter(e => e.includes('tue'));
+        wedArray = choices.filter(e => e.includes('wed'));
+        thuArray = choices.filter(e => e.includes('thu'));
+        friArray = choices.filter(e => e.includes('fri'));
+        satArray = choices.filter(e => e.includes('sat'));
+
+        var daysArray = [sunArray, monArray, tueArray, wedArray, thuArray, friArray, satArray];
+        for (let z = 0; z < daysArray.length; z++) {
+            var filteredArray = [];
+            var totArray = [];
+            if (daysArray[z].length == 5) {
+                var refArray = daysArray[z];
+                for (let j = 0; j < stepArray.length; j++) {
+                    if (stepArray[j].id.includes(refArray[0].slice(0, 3))) {
+                        totArray.push(stepArray[j]);
+                    }
+                }
+                var filteredArray = totArray.filter(value => {
+                    return !refArray.includes(value.id);
+                });
+                filteredArray.forEach(function (element) {
+                    document.getElementById(element.id).disabled = true;
+                    // document.getElementById(element.id).classList.add("disabled");
+                });
+            }
+            else {
+
+            }
+        }
+    }
+
+
+
+    /*Load Time Schedule*/
+    function loadModalSchedule(data) {
+        time = filterArray(data);
+        var start, end;
+        var setpoint = formName['setpoint'].value;
+        var allinputs = document.querySelectorAll('.small');
+        var inputLength = allinputs.length;
+        for (var z = 0; z < inputLength; ++z) {
+            document.querySelector('#' + allinputs[z].id).value = setpoint;
+            document.querySelector('#' + allinputs[z].id).style.background = "#eee";
+            document.querySelector('#' + allinputs[z].id).style.color = "#62798b";
+        }
+
+    }
+
+    /*Filter Time Scheduler Array*/
+    function filterArray(data) {
+        const output = Object.values(data.reduce((a, item) => {
+            a[item.name] = item;
+            return a;
+        }, {}));
+        return output;
+    }
+
+    /*Load Time Segment in UI */
+    function loadTimeSegment(fd, data, id) {
+        if (data.length > 0) {
+            document.getElementById('noTimeschedule').style.display = 'none';
+            document.getElementById('add_segment').style.display = 'none';
+            document.getElementById('edit_segment').style.display = 'flex';
+        } else {
+            document.getElementById('noTimeschedule').style.display = 'block';
+            document.getElementById('add_segment').style.display = 'block';
+            document.getElementById('edit_segment').style.display = 'none';
+        }
+
+        if (userRole == 'enduser') {
+            document.getElementById("noTimeschedule").style.display = 'none';
+            document.getElementById("add_segment").style.display = 'none';
+            document.getElementById("edit_segment").style.display = 'none';
+        }
+        var objTo = document.getElementById('schedule-fields')
+        var divtest = document.createElement("div");
+        divtest.setAttribute("id", 'schedule_' + id);
+        divtest.innerHTML = '<div style="padding: 20px" id="" class="selected-schedule"><div class="form-inline form-center set_enable"><h4 class="title-head"><span data-translate="Schedule">' + langjson['Schedule'] + '</span> ' + id + ':</h4><div class="schedule-content time_schedule"><label><input type="checkbox" id="sun' + id + '" class="schedule' + id + '" name="schedules" value="sun' + id + '" onChange="setenable(' + id + ')"><span data-attr=' + langjson["Sun"] + '></span></label><label><input type="checkbox" id="mon' + id + '" class="schedule' + id + '" name="schedules" value="mon' + id + '" onChange="setenable(' + id + ')"><span data-attr=' + langjson["M"] + '></span></label><label><input type="checkbox" id="tue' + id + '" class="schedule' + id + '" name="schedules" value="tue' + id + '" onChange="setenable(' + id + ')"><span data-attr=' + langjson["T"] + '></span></label><label><input type="checkbox" id="wed' + id + '" class="schedule' + id + '" name="schedules" value="wed' + id + '" onChange="setenable(' + id + ')"><span data-attr=' + langjson["W"] + '></span></label><label><input type="checkbox" id="thu' + id + '" class="schedule' + id + '" name="schedules" value="thu' + id + '" onChange="setenable(' + id + ')"><span data-attr=' + langjson["Thu"] + '></span></label><label><input type="checkbox" id="fri' + id + '" class="schedule' + id + '" name="schedules" value="fri' + id + '" onChange="setenable(' + id + ')"><span data-attr=' + langjson["F"] + '></span></label><label><input type="checkbox" id="sat' + id + '" class="schedule' + id + '" name="schedules" value="sat' + id + '" onChange="setenable(' + id + ')"><span data-attr=' + langjson["S"] + '></span></label></div></div><div class="form-inline form-center"><label class="sub-title"><b data-translate="Set Point">' + langjson['Set Point'] + '</b> <span class="spunit" style="font-weight: bold;"></span></label><div class="form-group form-row"><input type="text" class="form-control" placeholder="' + langjson['Set Point'] + '" maxlength="20" name="setpoint' + id + '" id="setpoint' + id + '" onkeypress="isNumber(this)" onblur="validate(this)" onkeypress="isNumber(this)" required></div> <small id="setpoint' + id + '_error" style="color: red;margin-left:5px"></small></div><div class="form-inline form-center"><label class="sub-title"><b data-translate="From">' + langjson['From'] + '</b></label><div class="form-group form-row"><input type="text" value="" id="timepicker_set' + id + '_min" class="form-control time-polyfill" name="' + id + '" disabled onchange="minmaxvalidation(event.target)"/></div> <label class="sub-title" style="margin-left: 40px;"><b data-translate="To">' + langjson['To'] + '</b></label> <div class="form-group form-row"> <input type="text" value="" id="timepicker_set' + id + '_max"  class="form-control time-polyfill" name="' + id + '" onchange="minmaxvalidation(event.target)" disabled /></div></div><div style="color: red;text-align: center" id="error_range' + id + '"></div><a style="color:red;" onclick="deletesegment(' + id + ')">' + langjson['Delete Segment'] + '<a></div><hr/> ';
+        objTo.appendChild(divtest);
+        var elements = document.getElementsByClassName("spunit");
+        if (formName['opmode'].value == 1 || formName['opmode'].value == 3) {
+            for (var i = 0; i < elements.length; i++) {
+                    elements[i].innerHTML = ' (Pa)';
+                }
+            }else if (formName['opmode'].value == 4) {
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].innerHTML = ' (%)';
+                }
+            }   
+        data.forEach(function (s, id) {
+            let idIndex = (s.name.length == 4) ? s.name.slice(-1) : s.name.slice(-2);
+            document.getElementById("loader").style.display = 'flex';
+            setTimeout(() => {
+                populateTime(data);
+            }, 1000)
+        });
+
+    }
+    // window.setInterval(function() {
+    //     var inputs = document.querySelectorAll('input[type=time]');
+    //     for (var i = 0; i < inputs.length; i++) {
+    //         const timeLabelElem =document.getElementById(inputs[i].id)
+    //         TimePolyfill(inputs[i], timeLabelElem)
+    //         inputs[i].polyfill.update()
+    //     }
+    // }, 1000);
+    function populateTime(data) {
+        data.forEach(function (s, id) {
+            // idIndex = s.id.charAt(s.id.length - 1);
+            //let idIndex = (s.id.length == 4) ? s.id.slice(-1) : s.id.slice(-2);
+            let idIndex = s.id;
+            let new_id = s.name.slice(0,3)+s.id;
+            if (document.getElementById(new_id)) document.getElementById(new_id).checked = true;
+            if (document.getElementById("setpoint" + idIndex)) document.getElementById("setpoint" + idIndex).value = s.setpoint;
+            if (document.getElementById("timepicker_set" + idIndex + "_min") && document.getElementById("timepicker_set" + idIndex + "_max")) {
+                document.getElementById("timepicker_set" + idIndex + "_min").value = s.start;
+                document.getElementById("timepicker_set" + idIndex + "_max").value = s.end;
+
+                document.getElementById("timepicker_set" + idIndex + "_min").disabled = false;
+                document.getElementById("timepicker_set" + idIndex + "_max").disabled = false
+            }
+        });
+        document.getElementById("loader").style.display = 'none';
+     
+        // callTimePicker(data.start, data.end);
+    }
+
+    /*Call Time picker*/
+    // function callTimePicker(start, end) {
+    //     (function ($) {
+    //         $(function () {
+    //             $('input.time_picker_input_min').timepicker({
+    //                 timeFormat: 'HH:mm',
+    //                 interval: 1,
+    //                 minTime: '00',
+    //                 maxTime: '11:59pm',
+    //                 defaultTime: start,
+    //                 startTime: '12:00 am',
+    //                 dynamic: false,
+    //                 dropdown: true,
+    //                 scrollbar: true,
+    //                 zindex: 10000,
+    //                 change: function () {
+                      
+    //                     let id = ($(this)[0].id.length==19)? $(this)[0].id.charAt(14): ($(this)[0].id.charAt(14)+  $(this)[0].id.charAt(15));
+    //                     let value = $(this)[0].value;
+
+    //                     if ((document.getElementById("timepicker_set" + id + "_min").value) >= value || (document.getElementById("timepicker_set" + id + "_max").value) < value) {
+    //                         document.getElementById("timepicker_set" + id + "_max").value = '';
+    //                         document.getElementById("error_range" + id).innerText = langjson['togreaterfrom'];
+    //                     } else {
+    //                         document.getElementById("error_range" + id).innerText = '';
+    //                     }
+    //                 }
+    //             });
+    //             $('input.time_picker_input_max').timepicker({
+    //                 timeFormat: 'HH:mm',
+    //                 interval: 1,
+    //                 minTime: '00',
+    //                 maxTime: '11:59pm',
+    //                 defaultTime: end,
+    //                 startTime: '12:00 am',
+    //                 dynamic: false,
+    //                 dropdown: true,
+    //                 scrollbar: true,
+    //                 zindex: 10000,
+    //                 change: function () {
+    //                     let id = ($(this)[0].id.length==19)? $(this)[0].id.charAt(14): ($(this)[0].id.charAt(14)+  $(this)[0].id.charAt(15));
+    //                     let value = $(this)[0].value;
+
+    //                     if ((document.getElementById("timepicker_set" + id + "_min").value) >= value || (document.getElementById("timepicker_set" + id + "_max").value) < value) {
+    //                         document.getElementById("timepicker_set" + id + "_max").value = '';
+    //                         document.getElementById("error_range" + id).innerText = langjson['togreaterfrom'];
+    //                     } else {
+    //                         document.getElementById("error_range" + id).innerText = '';
+    //                     }
+    //                 }
+    //             });
+    //             if (jsonData.length == 0) {
+    //                 //document.getElementById("timepicker_set1_max").value = '01:30';
+    //                 document.getElementById("error_range1").innerText = '';
+    //             }
+    //         });
+    //     })(jQuery);
+    // }
+    
+    /* Add Segment*/
+    var room = 1;
+    var newsch = 0;
+    function addTimeSegment() {
+        room = document.querySelectorAll('.selected-schedule').length;
+        newsch = 1;
+        room++;
+        if (room <= 35) {
+            var objTo = document.getElementById('schedule-fields')
+            var divtest = document.createElement("div");
+            divtest.setAttribute("id", 'schedule_' + room);
+            divtest.innerHTML = '<div style="padding: 20px" id="" class="selected-schedule"><div class="form-inline form-center set_enable"><h4 class="title-head"><span data-translate="Schedule">' + langjson['Schedule'] + '</span> ' + room + ':</h4><div class="schedule-content time_schedule"><label><input type="checkbox" id="sun' + room + '" class="schedule' + room + '" name="schedules" value="sun' + room + '" onChange="setenable(' + room + ')"><span data-attr=' + langjson["Sun"] + '></span></label><label><input type="checkbox" id="mon' + room + '" class="schedule' + room + '" name="schedules" value="mon' + room + '" onChange="setenable(' + room + ')"><span data-attr=' + langjson["M"] + '></span></label><label><input type="checkbox" id="tue' + room + '" class="schedule' + room + '" name="schedules" value="tue' + room + '" onChange="setenable(' + room + ')"><span data-attr=' + langjson["T"] + '></span></label><label><input type="checkbox" id="wed' + room + '" class="schedule' + room + '" name="schedules" value="wed' + room + '" onChange="setenable(' + room + ')"><span data-attr=' + langjson["W"] + '></span></label><label><input type="checkbox" id="thu' + room + '" class="schedule' + room + '" name="schedules" value="thu' + room + '" onChange="setenable(' + room + ')"><span data-attr=' + langjson["Thu"] + '></span></label><label><input type="checkbox" id="fri' + room + '" class="schedule' + room + '" name="schedules" value="fri' + room + '" onChange="setenable(' + room + ')"><span data-attr=' + langjson["F"] + '></span></label><label><input type="checkbox" id="sat' + room + '" class="schedule' + room + '" name="schedules" value="sat' + room + '" onChange="setenable(' + room + ')"><span data-attr=' + langjson["S"] + '></span></label></div></div><div class="form-inline form-center"><label class="sub-title"><b>' + langjson['Set Point'] + '</b> <span class="spunit" style="font-weight: bold;"></span></label><div class="form-group form-row"><input type="text" class="form-control" placeholder="Set Point" maxlength="20" name="setpoint' + room + '" id="setpoint' + room + '" onkeypress="isNumber(this)" onblur="validate(this)" onkeypress="isNumber(this)" required></div> <small id="setpoint' + room + '_error" style="color: red;"></small></div><div class="form-inline form-center"><label class="sub-title"><b>' + langjson['From'] + '</b></label><div class="form-group form-row"><input type="text" value="" onchange="minmaxvalidation(event.target)" id="timepicker_set' + room + '_min" class="form-control time-polyfill" name="' + room + '" disabled/></div> <label class="sub-title to_field"><b>' + langjson['To'] + '</b></label> <div class="form-group form-row"><input type="text" value="" onchange="minmaxvalidation(event.target)" id="timepicker_set' + room + '_max"  class="form-control time-polyfill" name="' + room + '" disabled /></div></div><div style="color: red;text-align: center" id="error_range' + room + '"></div><a style="color:red;" onclick="deletesegment(' + room + ')">' + langjson['Delete Segment'] + '</a></div><hr/> ';
+            objTo.appendChild(divtest);
+            var rangeElement = document.getElementsByClassName('range' + room);
+            for (let z = 23; z >= 0; --z) {
+                for (const e of rangeElement) {
+                    e.innerHTML += '<option value="' + (23 - z) + '">' + (23 - z) + ':00</option>';
+                }
+            }
+            setenable(room);
+            // callTimePicker("01:00", "02:00");
+        }
+        if (room == 35) {
+            document.getElementById("add-segment").style.display = "none";
+        }
+        if (room > 1) {
+            let ele = document.querySelectorAll('.selected-schedule');
+            ele[0].childNodes[4].style.display = 'block'
+        }
+        validateTimeSegment();
+        var elements = document.getElementsByClassName("spunit");
+        if (formName['opmode'].value == 1 || formName['opmode'].value == 3) {
+            for (var i = 0; i < elements.length; i++) {
+                 elements[i].innerHTML = ' (Pa)';
+            }
+        }else if (formName['opmode'].value == 4) {
+            for (var i = 0; i < elements.length; i++) {
+                 elements[i].innerHTML = ' (%)';
+            }
+        }
+    }
+   
+    /*Delete all*/
+    function deleteall(d) {
+        debugger;
+        // var schedules = document.querySelectorAll('.selected-schedule');
+        // var sch_data = jsonData.filter(entry => entry.name.includes(1));
+        dupJsonData = [];
+        jsonData = [];
+
+        document.getElementById('noTimeschedule').style.display = 'block';
+        document.getElementById('add_segment').style.display = 'block';
+        document.getElementById('edit_segment').style.display = 'none';
+        // const schedule_list =  Array.from(document.querySelectorAll(".schedules-list"));
+        // schedule_list.splice(1)
+        if(newHashmap.scheduler!=undefined && (newHashmap.opmode == newCheckboxId)) {
+            jsonData = newHashmap.scheduler;
+            dupJsonData = newHashmap.scheduler;
+            debugger;
+        }else{
+            dupJsonData = [];
+            jsonData =[];
+        }
+        if(d=='all'){
+            dupJsonData = [];
+            jsonData =[];
+            newHashmap.scheduler = [];
+        } 
+        populateScheduler(jsonData);
+        closeSchedule();
+        room = 1;
+
+        addTimeSegment();
+       setTimeout(()=>{
+           if( document.getElementById(newCheckboxId)) document.getElementById(newCheckboxId).checked = true;
+           selectOperatingMode(newCheckboxId);
+        }, 500)
+        document.getElementById('delete_msg').style.display = 'none';
+    }
+
+    /* Delete Added Segment*/
+    function deletesegment(id) {
+        document.getElementById("loader").style.display = 'flex';
+        var element = document.getElementById('schedule_' + id);
+        element.remove();
+        room--;
+
+        var list = document.querySelectorAll('.selected-schedule');
+
+        for (x = 0; x < list.length; x++) {
+            list[x].parentNode.setAttribute("id", "schedule_" + (x + 1));
+            list[x].childNodes[4].setAttribute("onclick", 'deletesegment(' + (x + 1) + ')');
+            for (y = 0; y < list[x].childNodes[0].childNodes[1].childNodes.length; y++) {
+                list[x].childNodes[0].childNodes[1].childNodes[y].childNodes[0].setAttribute("class", "schedule" + (x + 1));
+                list[x].childNodes[0].childNodes[1].childNodes[y].childNodes[0].setAttribute("onchange", "setenable(" + (x + 1) + ")");
+            }
+            var checkboxes = document.querySelectorAll('.schedule' + (x + 1));
+            for (y = 0; y < checkboxes.length; y++) {
+                var path = checkboxes[y].getAttribute("id");
+                var iD = path.slice(0, 3);
+  
+                list[x].childNodes[0].childNodes[1].childNodes[y].childNodes[0].setAttribute("id", iD + (x + 1));
+                list[x].childNodes[0].childNodes[1].childNodes[y].childNodes[0].setAttribute("value", iD + (x + 1));
+                list[x].childNodes[1].childNodes[1].childNodes[0].setAttribute("name", "setpoint" + (x + 1));
+                list[x].childNodes[1].childNodes[1].childNodes[0].setAttribute("id", "setpoint" + (x + 1));
+                list[x].childNodes[1].childNodes[3].setAttribute("id", "setpoint" + (x + 1) + "_error");
+                list[x].childNodes[2].childNodes[1].childNodes[0].setAttribute("name", (x + 1));
+                list[x].childNodes[2].childNodes[1].childNodes[0].setAttribute("id", "timepicker_set" + (x + 1) + "_min");
+                list[x].childNodes[2].childNodes[1].childNodes[0].setAttribute("class", "form-control time-polyfill");
+
+                if (list[x].childNodes[2].childNodes[5].childNodes[0].id != undefined) {
+                    list[x].childNodes[2].childNodes[5].childNodes[0].setAttribute("name", (x + 1));
+                    list[x].childNodes[2].childNodes[5].childNodes[0].setAttribute("id", "timepicker_set" + (x + 1) + "_max");
+                    // list[x].childNodes[2].childNodes[5].childNodes[1].setAttribute("class", "time_picker_input time_picker_input_max form-control");
+                } else if (list[x].childNodes[2].childNodes[5].childNodes[1].id != undefined) {
+                    list[x].childNodes[2].childNodes[5].childNodes[1].setAttribute("name", (x + 1));
+                    list[x].childNodes[2].childNodes[5].childNodes[1].setAttribute("id", "timepicker_set" + (x + 1) + "_max");
+                    // list[x].childNodes[2].childNodes[5].childNodes[1].setAttribute("class", "time_picker_input time_picker_input_max form-control");
+                }
+
+                list[x].childNodes[3].setAttribute("id", "error_range" + (x + 1));
+            }
+            list[x].childNodes[0].childNodes[0].innerHTML = langjson['Schedule'] + " " + (x + 1) + ":";
+        }
+        if (room < 35) {
+            document.getElementById("add-segment").style.display = "block";
+        }
+        // if(room==0){
+        //     room = 1;
+        //     addTimeSegment();
+        //     document.getElementById('timeschedule_modal').style.display = 'none';
+        // }
+        document.getElementById("loader").style.display = 'none';
+        validateTimeSegment();
+    }
+    var finalObj = {};
+
+    // final submission of data
+    function processData() {
+        if (formName["setpoint"]?.value == "") {
+            formName["setpoint"].classList.add('error-field');
+            document.getElementById(formName["setpoint"].name + '_error').innerHTML = langjson['reqField'];
+            checkErrorText();
+            return false;
+        } else if (formName["fixedfspeedmin"]?.value == "") {
+            formName["fixedfspeedmin"].classList.add('error-field');
+            document.getElementById(formName["fixedfspeedmin"].name + '_error').innerHTML = langjson['fixedmin'];
+            checkErrorText();
+            return false;
+        } else if (formName["fixedfspeedmax"]?.value == "") {
+            formName["fixedfspeedmax"].classList.add('error-field');
+            document.getElementById(formName["fixedfspeedmax"].name + '_error').innerHTML = langjson['fixedmax'];
+            checkErrorText();
+            return false;
+        } else if (parseInt(formName["fixedfspeedmax"]?.value) <= parseInt(formName["fixedfspeedmin"]?.value)) {
+            formName["fixedfspeedmax"].classList.add('error-field');
+            document.getElementById('fixedfspeedminmax_error').innerHTML = langjson['fixedminmax'];
+            checkErrorText();
+            return false;
+        } else if (formName["pfactor"]?.value == "") {
+            formName["pfactor"].classList.add('error-field');
+            document.getElementById(formName["pfactor"].name + '_error').innerHTML = langjson['pfactorreq'];
+            checkErrorText();
+            return false;
+        } else if (formName["ifactor"]?.value == "") {
+            formName["ifactor"].classList.add('error-field');
+            document.getElementById(formName["ifactor"].name + '_error').innerHTML = langjson['ifactorreq'];
+            checkErrorText();
+            return false;
+        } else if (formName["sensoradj"]?.value == "") {
+            formName["sensoradj"].classList.add('error-field');
+            document.getElementById(formName["sensoradj"].name + '_error').innerHTML = langjson['reqField'];
+            checkErrorText();
+            return false;
+        } else if (formName["IP"]?.value == "s" && formName['ip_inp'].value == '') {
+            formName["ip_inp"].parentElement.classList.add('error-field');
+            document.getElementById(formName["ip_inp"].name + '_error').innerHTML = 'IP field is required';
+            checkErrorText();
+            return false;
+        } else if (formName["IP"]?.value == "s" && formName['mask'].value == '') {
+            formName["mask"].parentElement.classList.add('error-field');
+            document.getElementById(formName["mask"].name + '_error').innerHTML = 'Mask field is required';
+            checkErrorText();
+            return false;
+        } else if (formName["IP"]?.value == "s" && formName['gateway'].value == '') {
+            formName["gateway"].parentElement.classList.add('error-field');
+            document.getElementById(formName["gateway"].name + '_error').innerHTML = 'Gateway field is required';
+            checkErrorText();
+            return false;
+        } else if (formName["IP"]?.value == "s" && formName['dns'].value == '') {
+
+            formName["dns"].parentElement.classList.add('error-field');
+            document.getElementById(formName["dns"].name + '_error').innerHTML = 'DNS field is required';
+            checkErrorText();
+            return false;
+        } else if (formName["NetworkInterface"].value == 'wifi' && (formName["ssid"]?.value == "" || formName["passphrase"]?.value == '')) {
+            formName["ssid"].parentElement.classList.add('error-field');
+            formName["passphrase"].parentElement.classList.add('error-field');
+            document.getElementById(formName["ssid"].name + '_error').innerHTML = 'Please fill ssid and passphrase fields';
+            checkErrorText();
+            return false;
+        } else {
+            if (formName["opmode"]?.value == "4" && !(parseInt(formName["setpoint"]?.value) >= parseInt(formName["fixedfspeedmin"]?.value) && parseInt(formName["setpoint"]?.value) <= parseInt(formName["fixedfspeedmax"]?.value))) {
+                formName["setpoint"].classList.add('error-field');
+                document.getElementById(formName["setpoint"].name + '_error').innerHTML = langjson['shouldbe'] + ' ' + formName["fixedfspeedmin"]?.value + ' and ' + formName["fixedfspeedmax"]?.value + langjson['allowed'];
+                checkErrorText();
+                return false;
+            }
+            document.getElementById(formName["ssid"].name + '_error').innerHTML = '';
+            filteredJsonData = filterArray(jsonData).sort((a, b) => a.name.localeCompare(b.name));
+            filteredJsonData.forEach((e) => {
+                if (!e.start.includes(':00') && !e.end.includes(':00')) {
+                    e.start = e.start ;
+                    e.end = e.end ;
+                }
+            })
+           
+            if (formName["opmode"]?.value == "4") {
+                var filterResult = jsonData.filter((x) => { return !(x.setpoint >= 10 && x.setpoint <= 100) });
+                if (filterResult.length > 0) {
+                    document.getElementById("alert_error").classList.add("show");
+                    document.getElementById("error_msg_alert").innerHTML = langjson['schedulererror'];
+                    return false;
+                }
+            }
+            var lang;
+            if(localStorage.getItem('Lang')=='i18n/de.json'){
+                lang = 0; 
+            }else if(localStorage.getItem('Lang')=='i18n/ge.json'){
+                lang = 1; 
+            }else if(localStorage.getItem('Lang')=='i18n/en.json'){
+                lang = 2; 
+            }
+            filteredJsonData.forEach(function (obj) {
+                obj.id = parseInt(obj.id);
+            })
+
+            finalObj = {
+                "config": {
+                    "opmode": parseInt(formName['opmode'].value),
+                    "setpoint": {
+                        "default": parseInt(formName["setpoint"].value) || 280,
+                        "low": parseInt(formName["multiplemin"].value) || 0,
+                        "high": parseInt(formName["multiplemax"].value) || 20
+                    },
+                    "fixedspeedmax": parseInt(formName["fixedfspeedmax"].value || 100),
+                    "fixedspeedmin": parseInt(formName["fixedfspeedmin"].value || 0),
+                    "pfactor": parseInt(formName["pfactor"].value || 256),
+                    "ifactor": parseInt(formName["ifactor"].value || 0),
+                    "cfunc": parseInt(formName["ctrlbehavior"].value),
+                    "sensoradj": parseInt(formName["sensoradj"].value || 0),
+                    "scheduler": filteredJsonData,
+                    "scheduledmode": parseInt(formName['scheduled_mode'].value),
+                    "mtr_stop_en": parseInt(formName["motor_enable"].value || 0),
+                    "en": formName["sensor_enabled"].checked ? 1 : 0,
+                    "sensor_unit": {
+                        "unit": parseInt(formName["sensor_unit"].value) || 0,
+                        "min": parseInt(formName["sensor_min"].value),
+                        "max": parseInt(formName["sensor_max"].value),
+                    },
+                    "wifiConfig": {
+                        "ssid": formName["ssid"].value,
+                        "pwd": formName["passphrase"].value,
+
+                    },
+                    "ethConfig": {
+                        "ifc": IF,
+                        "iptype": formName["IP"].value,
+                        "ip": formName["ip_inp"].value || '0.0.0.0',
+                        "MASK": formName["mask"].value || '0.0.0.0',
+                        "GW": formName["gateway"].value || '0.0.0.0',
+                        "DNS": formName["dns"].value || '0.0.0.0'
+                    },
+                    "lang":lang 
+                    // "ts": new Date().getTime()              
+                }
+            }
+
+        }
+
+
+    }
+
+    function finalSubmit() {
+        validateForm();
+        processData();
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+
+                var result = this.responseText;
+                if (result == "ACP_PASS") {
+                    document.getElementById('success_msg').style.display = "flex";
+                } else {
+                    document.getElementById('error_msg').style.display = "flex";
+                }
+            }
+        };
+        xhttp.open("POST", "/access_point_val", true);
+        xhttp.setRequestHeader("Content-type", "application/json");
+        if (finalObj.config.scheduler.length == 0 && formName['scheduled_mode'].value != 0) {
+            document.getElementById("alert_error").classList.add("show");
+            document.getElementById("error_msg_alert").innerHTML = langjson['modeenabled'];
+            return false;
+            debugger;
+        }else if (checkErrorText() != false ) {
+            document.getElementById("alert_error").classList.remove("show");
+            document.getElementById("error_msg_alert").innerHTML = '';
+            xhttp.send(JSON.stringify(finalObj));
+        } 
+        
+
+        return false;
+    }
+
+    function exit() {
+        const xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            // if (this.readyState === 4 && this.status === 200) {
+            // // Clear any session data or tokens that were set during login
+            // // For example:
+            // localStorage.removeItem('authToken');
+
+            // // Redirect the user to the login page
+            // window.location.href = '/';
+            // }
+        };
+
+        xhttp.open('POST', '/log_out', true);
+        xhttp.send();
+
+        setTimeout(function() {
+            window.location.href = '/';
+        }, 1000);
+    }
+
+    function logout() {
+        let hasChanged = false; 
+        filteredJsonData = filterArray(jsonData).sort((a, b) => a.name.localeCompare(b.name));
+        filteredJsonData.forEach((e) => {
+            if (!e.start.includes(':00') && !e.end.includes(':00')) {
+                e.start = e.start ;
+                e.end = e.end ;
+            }
+        });
+        filteredJsonData.forEach(function (obj) {
+            obj.id = parseInt(obj.id);
+        });
+        var finalOut = {
+            "opmode": parseInt(formName['opmode'].value),
+            "setpoint": {
+                "default": parseInt(formName["setpoint"].value),
+                "low": parseInt(formName["multiplemin"].value),
+                "high": parseInt(formName["multiplemax"].value)
+            },
+            "fixedspeedmax": parseInt(formName["fixedfspeedmax"].value),
+            "fixedspeedmin": parseInt(formName["fixedfspeedmin"].value),
+            "pfactor": parseInt(formName["pfactor"].value),
+            "ifactor": parseInt(formName["ifactor"].value),
+            "cfunc": parseInt(formName["ctrlbehavior"].value),
+            "sensoradj": {preSensorAdj: parseInt(formName["sensoradj"].value)},
+            "scheduler": filteredJsonData,
+            "scheduledmode": parseInt(formName['scheduled_mode'].value),
+            "mtr_stop_en": parseInt(formName["motor_enable"].value || 0),
+            "en": formName["sensor_enabled"].checked ? 1 : 0,
+            "sensor_unit": {
+                "unit": parseInt(formName["sensor_unit"].value),
+                "min": parseInt(formName["sensor_min"].value),
+                "max": parseInt(formName["sensor_max"].value),
+            },
+            "wifiConfig": {
+                "ssid": formName["ssid"].value,
+                "pwd": formName["passphrase"].value,
+
+            },
+            "ethConfig": {
+                "ifc": IF,
+                "iptype": formName["IP"].value,
+                "ip": formName["ip_inp"].value,
+                "MASK": formName["mask"].value,
+                "GW": formName["gateway"].value,
+                "DNS": formName["dns"].value
+            },
+          
+        }
+        const obj1Keys = Object.keys(finalOut);
+        const obj2Keys = Object.keys(gatewayResponse);
+        for (let key of obj1Keys) {
+            if (typeof gatewayResponse[key] != 'object' && gatewayResponse[key] != finalOut[key]) {
+                hasChanged = true;  
+                debugger; 
+            }else{
+                var objKeys = Object.keys(gatewayResponse[key]);
+                for (let key1 of objKeys) {
+                    if (gatewayResponse[key][key1] != finalOut[key][key1]) {
+                        hasChanged = true;  
+                        debugger;
+                      } else{
+                        if([key][key1]!=undefined){
+                        debugger;
+                        hasChanged = false;  
+                        }
+                    }
+                }
+              
+            }
+        }
+        // const form = document.querySelector('#config_form');
+        // // const inputs = form.querySelectorAll('input, select');
+        // const inputs = document.querySelectorAll('input, select');
+        // let hasChanged = false; 
+        
+        // inputs.forEach((field) => {
+        //     if (field.tagName == 'SELECT') {
+        //         if ((field.defaultValue !== undefined) && (field.defaultValue !== '')) {
+        //             if ((field.value !== field.defaultValue) || (field.checked !==field.defaultChecked)) {
+        //                 console.log(field);
+        //                 hasChanged = true;
+        //             }   
+        //         }
+        //     } else {
+        //         if ((field.value !== '--:--') && ((field.id !== 'en')|| (field.id !== 'ge') || (field.id !== 'de'))) {
+        //             if ((field.value !== field.defaultValue) || (field.checked !==field.defaultChecked)) {
+        //                 debugger;
+        //                 console.log(field);
+        //                 hasChanged = true;
+        //         }  
+        //         } 
+        //     }
+        // });
+        
+        if (hasChanged) {
+            document.getElementById('header_menu').classList.remove('show');
+            document.getElementById('header_menu_mobile').classList.remove('show');
+            document.getElementById('alert-popup').style.display = 'flex';
+        } else {
+            // alert('No changes detected!');
+            // location.href='/'
+            const xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function() {
+                // if (this.readyState === 4 && this.status === 200) {
+                // // Clear any session data or tokens that were set during login
+                // // For example:
+                // localStorage.removeItem('authToken');
+
+                // // Redirect the user to the login page
+                // window.location.href = '/';
+                // }
+            };
+
+            xhttp.open('POST', '/log_out', true);
+            xhttp.send();
+
+            setTimeout(function() {
+                window.location.href = '/';
+            }, 1000);
+            }
+    }
+</script>
+
+</html>
